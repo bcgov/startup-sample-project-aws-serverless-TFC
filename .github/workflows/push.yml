@@ -2,8 +2,8 @@ name: ci
 
 on:
   push:
-    branches: [ master ]
-  
+    branches: [master]
+
 env:
   TF_VERSION: 1.0.5
   environment: dev
@@ -11,7 +11,6 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -20,23 +19,24 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - name: checkout the repo and building the Backend    
+      - name: checkout the repo and building the Backend
         uses: actions/checkout@v2
-        
-      - name : building the backend 
-        run: |
-          
-          cd ./lambda
-          npm install
-          cd -
-          
+
       - uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: ${{ env.TF_VERSION }}
           cli_config_credentials_token: ${{ secrets.TFC_TEAM_TOKEN }}
-          
+
+      - name: building the backend
+        run: |
+
+          cd server/lambda
+          npm install
+          cd -
+
       - name: Deploying back-end using terraform
         run: |
+          cd server
           cat <<EOF > backend.hcl
           organization = "${{ env.organization }}"
           workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-backend" }
@@ -47,8 +47,9 @@ jobs:
 
       - name: Building front-end and deploying Frontend using terraform
         run: |
-          terraform output > ./client/.env
-          cd ./client
+          cd server
+          terraform output > ../client/.env
+          cd ../client
           npm install
 
           CI=false npm run build
@@ -60,4 +61,3 @@ jobs:
 
           terraform init -backend-config=backend.hcl
           terraform apply -auto-approve
-          
