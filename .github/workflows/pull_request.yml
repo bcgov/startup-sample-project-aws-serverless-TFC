@@ -2,7 +2,7 @@ name: Node.js CI
 
 on:
   pull_request:
-    branches: [master]
+    branches: [main]
 env:
   environment: dev
   organization: bcgov
@@ -29,7 +29,6 @@ jobs:
         run: |
           cd server/lambda
           npm install
-          cd -
 
       - name: Deploying back-end using terraform
         run: |
