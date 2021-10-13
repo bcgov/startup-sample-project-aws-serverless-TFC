@@ -52,7 +52,7 @@ jobs:
 
           cat <<EOF > backend.hcl
           organization = "${{ env.organization }}"
-          workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-backend" }
+          workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-frontend" }
           EOF
 
           terraform init-backend-config=backend.hcl
