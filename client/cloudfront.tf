@@ -13,7 +13,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "web_distribution" {
-  bucket = "ssp-testing-bucket-devenv"
+  bucket = "ssp-testing-bucket-pfcem0-dev"
   acl    = "private"
 }
 resource "aws_cloudfront_origin_access_identity" "web_distribution" {

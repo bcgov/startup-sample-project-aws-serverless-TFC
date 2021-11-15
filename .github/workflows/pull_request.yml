@@ -55,5 +55,5 @@ jobs:
           workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-frontend" }
           EOF
 
-          terraform init-backend-config=backend.hcl
+          terraform init -backend-config=backend.hcl
           terraform plan
