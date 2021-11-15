@@ -9,11 +9,11 @@ const { randomBytes } = require('crypto');
  */
 class DynamoDBClient {
   constructor() {
-    
+
     this.db = null;
     this._docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
   }
-    
+
   /**
    * Return config variables
    *
@@ -21,23 +21,23 @@ class DynamoDBClient {
    * @memberof DBClient
    */
   static config() {
-    return {      
-      dbName: process.env.DB_NAME || 'ssp-greetings'      
+    return {
+      dbName: process.env.DB_NAME || 'ssp-greetings-serverless'
     };
   }
 
-  
+
   async generateUniqueHexId() {
     return new Promise(resolve => {
       const randomHexId = randomBytes(4).toString('hex').toUpperCase();
-      const {       
+      const {
         dbName,
       } = DynamoDBClient.config();
 
       var params = {
         Key: {
-        "id":  randomHexId          
-        }, 
+        "id":  randomHexId
+        },
         TableName: dbName
       };
 
@@ -45,7 +45,7 @@ class DynamoDBClient {
         if (err) {
           console.log(err, err.stack); // an error occurred
           resolve(params.Key["id"]);
-          
+
         }
         else {
           if (data.Item == null) {
@@ -58,15 +58,15 @@ class DynamoDBClient {
 
     });
   };
-  
+
 
   async getGreetings() {
     return new Promise(resolve => {
 
-        const {       
+        const {
             dbName,
           } = DynamoDBClient.config();
-          
+
         var params = {
             TableName: dbName,
             KeyConditionExpression: "pid = :pid",
@@ -78,12 +78,12 @@ class DynamoDBClient {
           };
         this._docClient.query(params, function(err, data) {
             if (err) {
-              console.log("Unable to get item");            
+              console.log("Unable to get item");
             } else {
               resolve(data.Items);
             }
-            resolve();            
-        });      
+            resolve();
+        });
     });
   }
 
@@ -93,12 +93,12 @@ class DynamoDBClient {
 
     return new Promise(resolve => {
 
-      const {       
+      const {
         dbName,
       } = DynamoDBClient.config();
 
       const currentIsoDate = new Date().toISOString();
-      
+
       var params = {
         TableName: dbName,
         Item:{
@@ -114,12 +114,12 @@ class DynamoDBClient {
 
       this._docClient.put(params, function(err, data) {
           if (err) {
-            logger.info("Unable to add item:", err);    
-            resolve();        
-          } else {            
+            logger.info("Unable to add item:", err);
+            resolve();
+          } else {
             resolve(params.Item);
-          }                    
-      });      
+          }
+      });
 
     });
   }
