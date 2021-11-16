@@ -39,7 +39,7 @@ resource "aws_s3_bucket_object" "lambda_greetings_server" {
 
 
 resource "aws_dynamodb_table" "ssp-greetings" {
-  name      = "ssp-greetings"
+  name      = "ssp-greetings-serverless"
   hash_key  = "pid"
   range_key = "id"
 
@@ -97,7 +97,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
       }
     ]
   }
-  EOF 
+  EOF
 }
 
 

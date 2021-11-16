@@ -12,8 +12,13 @@ provider "aws" {
   }
 }
 
+resource "random_pet" "lambda_bucket_name" {
+  prefix = "ssp-testing-bucket"
+  length = 4
+}
+
 resource "aws_s3_bucket" "web_distribution" {
-  bucket = "ssp-testing-bucket-devenv"
+  bucket = random_pet.lambda_bucket_name.id
   acl    = "private"
 }
 resource "aws_cloudfront_origin_access_identity" "web_distribution" {
