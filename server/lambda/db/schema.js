@@ -3,7 +3,7 @@
  */
 
 const collections = {
-  GREETINGS: 'lambda-ssp-greetings',
+  GREETINGS: 'ssp-greetings-serverless',
 };
 
 const schema = [

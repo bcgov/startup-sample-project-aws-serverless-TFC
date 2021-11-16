@@ -22,7 +22,7 @@ class DynamoDBClient {
    */
   static config() {
     return {
-      dbName: process.env.DB_NAME || 'lambda-ssp-greetings'
+      dbName: process.env.DB_NAME || 'ssp-greetings-serverless'
     };
   }
 
