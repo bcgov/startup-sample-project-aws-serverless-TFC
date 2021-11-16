@@ -3,7 +3,7 @@
  */
 
 const collections = {
-  GREETINGS: 'ssp-greetings',
+  GREETINGS: 'lambda-ssp-greetings',
 };
 
 const schema = [
@@ -19,4 +19,3 @@ module.exports = {
   collections,
   schema,
 };
-

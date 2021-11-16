@@ -2,7 +2,7 @@ const databaseSuffix = process.env.NODE_ENV === 'test' ? 'test' : process.env.DB
 
 module.exports = [
   {
-    TableName: `ssp-greetings-${databaseSuffix}`,
+    TableName: `lambda-ssp-greetings-${databaseSuffix}`,
     KeySchema: [
       { AttributeName: 'id', KeyType: 'HASH' },
     ],

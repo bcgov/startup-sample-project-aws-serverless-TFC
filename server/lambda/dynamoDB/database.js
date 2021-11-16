@@ -42,5 +42,5 @@ const dbClient = new AWS.DynamoDB.DocumentClient();
 
 module.exports = {
   db: dbClient,
-  greetingsTable: `ssp-greetings-${databaseSuffix}`,
+  greetingsTable: `lambda-ssp-greetings-${databaseSuffix}`,
 };

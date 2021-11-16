@@ -38,8 +38,8 @@ resource "aws_s3_bucket_object" "lambda_greetings_server" {
 }
 
 
-resource "aws_dynamodb_table" "ssp-greetings" {
-  name      = "ssp-greetings"
+resource "aws_dynamodb_table" "lambda-ssp-greetings" {
+  name      = "lambda-ssp-greetings"
   hash_key  = "pid"
   range_key = "id"
 
@@ -83,7 +83,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
               "dynamodb:Update*",
               "dynamodb:PutItem"
           ],
-          "Resource": "${aws_dynamodb_table.ssp-greetings.arn}"
+          "Resource": "${aws_dynamodb_table.lambda-ssp-greetings.arn}"
         },
         {
           "Effect": "Allow",
@@ -97,7 +97,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
       }
     ]
   }
-  EOF 
+  EOF
 }
 
 
