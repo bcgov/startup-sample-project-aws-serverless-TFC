@@ -13,4 +13,4 @@ you'll need to add two github secrets:
 The github actions will trigger on a pull request creation and merge.
 - Creating a pull request will run a `terraform plan` and outline everything that will be deployed into your AWS accounts, but will not create anything.
 - Merging into `main` will run a `terraform apply` and your AWS assets will be deployed into your `dev` and `sandbox` accounts.
->NOTE: make sure you are creating pull requests/ merging within your fork
+>NOTE: make sure you are creating pull requests/ merging within your fork.
