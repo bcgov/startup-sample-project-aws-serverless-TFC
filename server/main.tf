@@ -24,6 +24,18 @@ resource "aws_s3_bucket" "lambda_bucket" {
   force_destroy = true
 }
 
+resource "random_pet" "upload_bucket_name" {
+  prefix = "upload-bucket"
+  length = 2
+}
+
+resource "aws_s3_bucket" "upload_bucket" {
+  bucket        = random_pet.upload_bucket_name.id
+  acl           = "private"
+  force_destroy = true
+}
+
+
 data "archive_file" "lambda_greetings_server" {
   type        = "zip"
   source_dir  = "${path.module}/lambda"
@@ -37,9 +49,14 @@ resource "aws_s3_bucket_object" "lambda_greetings_server" {
   etag   = filemd5(data.archive_file.lambda_greetings_server.output_path)
 }
 
+resource "random_pet" "DB_NAME" {
+  prefix = "ssp-greetings"
+  length = 2
+}
+
 
 resource "aws_dynamodb_table" "ssp-greetings" {
-  name      = "ssp-greetings-serverless"
+  name      = random_pet.DB_NAME.id
   hash_key  = "pid"
   range_key = "id"
 
@@ -90,11 +107,38 @@ resource "aws_iam_role_policy" "lambda_policy" {
            "Action": [
                   "logs:CreateLogGroup",
                   "logs:CreateLogStream",
+                   "kms:*",
                   "logs:PutLogEvents",
                   "logs:DescribeLogStreams"
               ],
           "Resource": "*"
-      }
+      },
+       {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:PutBucketCORS"
+            ],
+            "Resource": [
+                "${aws_s3_bucket.upload_bucket.arn}",
+                "${aws_s3_bucket.upload_bucket.arn}/*"
+            ]
+        },
+        {
+            "Sid": "VisualEditor2",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:PutBucketCORS"
+            ],
+            "Resource": [
+                "arn:aws:s3:::api-testing-bucket-kiran",
+                "arn:aws:s3:::api-testing-bucket-kiran/*"
+            ]
+        }
     ]
   }
   EOF
@@ -132,13 +176,15 @@ resource "aws_lambda_function" "greetings_server_lambda" {
   source_code_hash = data.archive_file.lambda_greetings_server.output_base64sha256
 
   role = aws_iam_role.lambda_exec.arn
+  environment {
+    variables = {
+      bucketName = aws_s3_bucket.upload_bucket.id
+      DB_NAME = random_pet.DB_NAME.id
+    }
+  }
+  
 }
 
-#resource "aws_cloudwatch_log_group" "greetings_server_logs" {
-#name = "/aws/lambda/${aws_lambda_function.greetings_server_lambda.function_name}"
-
-#retention_in_days = 30
-#}
 
 resource "aws_api_gateway_rest_api" "apiLambda" {
   name = "myAPI"
