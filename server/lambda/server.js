@@ -5,6 +5,8 @@ const path = require('path');
 const { randomBytes } = require('crypto');
 const { passport } = require('./auth.js');
 const requireHttps = require('./require-https.js');
+const multer = require('multer')
+const cors = require('cors')
 const {
   validate, GreetingSchema,
 } = require('./validation.js');
@@ -14,13 +16,17 @@ let dynamodbClient = null;
 if ('development' === process.env.NODE_ENV) dbClient = require('./db').dbClient;
 if ('development' === process.env.NODE_ENV) collections = require('./db').collections;
 if ('development' !== process.env.NODE_ENV) dynamodbClient = require('./db').dynamodbClient;
+const { uploadFile, getFileStream } = require('./s3')
 const { errorHandler, asyncMiddleware } = require('./error-handler.js');
 const logger = require('./logger.js');
+const util = require('util')
+const fs = require('fs')
+const unlinkFile = util.promisify(fs.unlink)
 
 const apiBaseUrl = '/api/v1';
 const app = express();
 
-if ('true' === process.env.HTTPS) app.use(requireHttps);;
+if ('true' === process.env.HTTPS) app.use(requireHttps);
 app.use(bodyParser.json());
 //app.use(express.static(path.join(__dirname, '../client/build')));
 //app.use(favicon(path.join(__dirname, '../client/build', 'favicon.ico')))
@@ -56,6 +62,32 @@ app.get(`${apiBaseUrl}/time`, (req, res) => {
 })
   res.status(200).send(timeNow.toString());
 });
+
+const upload = multer({ dest: '/tmp/uploads/' })
+
+///POST  image to s3.
+
+app.use((req, res, next) => {
+  res.append('Access-Control-Allow-Origin', ['*']);
+  res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.append('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
+app.post(`${apiBaseUrl}/images`, upload.single('image'), async (req, res) => {
+
+  const file = req.file
+  console.log(file)
+
+  // apply filter
+  // resize 
+
+  const result = await uploadFile(file)
+  await unlinkFile(file.path)
+  console.log(result)
+  const description = req.body.description
+  res.send({imagePath: `/images/${result.Key}`})
+})
 
 // Choose and save greeting
 app.post(`${apiBaseUrl}/greeting`,

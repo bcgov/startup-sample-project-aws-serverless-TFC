@@ -3,7 +3,7 @@ const logger = require('./logger.js');
 let dbClient = null;
 if ('development' === process.env.NODE_ENV) dbClient = require('./db').dbClient;
 
-const port = 80;
+const port = 8080;
 
 /** @type {http.Server|undefined} */
 let server;
