@@ -43,7 +43,7 @@ data "archive_file" "lambda_greetings_server" {
 }
 
 resource "aws_s3_bucket_object" "lambda_greetings_server" {
-  bucket = aws_s3_bucket.lambda_bucket.id
+  bucket = aws_s3_bucket.lambda_bucket.id   #argument deprecated
   key    = "greetings-server.zip"
   source = data.archive_file.lambda_greetings_server.output_path
   etag   = filemd5(data.archive_file.lambda_greetings_server.output_path)
