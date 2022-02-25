@@ -1,6 +1,5 @@
 # Serverless Architecture
-# FEB 24 VERSION
-# 2nd version
+
 ![Serverless Architecture](./images/serverless-architecture.png)
 
 # startup-sample-project-aws-serverless
