@@ -44,7 +44,6 @@ console.log(values)
               { value: 'Bonjour', label: 'Bonjour' },
               { value: 'Greetings and salutations', label: 'Greetings and salutations' },
               { value: 'Hello', label: 'Hello' },
-              { value: 'Hola', label: 'Hola' },
               { value: 'Howdy', label: 'Howdy' },
               { value: 'Konichiwa', label: 'Konichiwa' },
             ]}
