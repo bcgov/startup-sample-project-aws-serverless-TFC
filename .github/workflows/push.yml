@@ -42,6 +42,7 @@ jobs:
           EOF
 
           terraform init -backend-config=backend.hcl
+          terraform destroy -auto-approve
           terraform apply -auto-approve
 
       - name: Building front-end and deploying Frontend using terraform
@@ -59,4 +60,5 @@ jobs:
           EOF
 
           terraform init -backend-config=backend.hcl
+          terraform destroy -auto-approve
           terraform apply -auto-approve
