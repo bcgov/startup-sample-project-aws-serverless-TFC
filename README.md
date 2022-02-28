@@ -13,6 +13,7 @@ you'll need to add two github secrets:
   - `LICENCEPLATE` is the 6 character licence plate associated with your project set e.g. `abc123`
   - `TFC_TEAM_TOKEN` is the token used to access the terraform cloud runner.
   - To access the TFC_Team_Token: Log to AWS> Search for Parameter Store > the key is under /octk/tfc/team_token
+  - Once the app has been built, you should be able to log into AWS with your IDIR account (2FA). Once in AWS search for Cloudfront and then click on Distributions (If you can not see it click the hamburger on the top left corner). The Distributions dashboard shows the Domain name, you can use that domain name to interact with you app.
 
 
 #### Pipeline
