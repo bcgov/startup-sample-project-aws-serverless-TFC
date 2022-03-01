@@ -1,7 +1,11 @@
 terraform {
   backend "remote" {}
-
-
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "3.9.0"
+    }
+  }
 }
 
 
@@ -179,10 +183,10 @@ resource "aws_lambda_function" "greetings_server_lambda" {
   environment {
     variables = {
       bucketName = aws_s3_bucket.upload_bucket.id
-      DB_NAME = random_pet.DB_NAME.id
+      DB_NAME    = random_pet.DB_NAME.id
     }
   }
-  
+
 }
 
 

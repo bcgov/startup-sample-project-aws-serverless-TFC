@@ -44,6 +44,8 @@ console.log(values)
               { value: 'Hello', label: 'Hello' },
               { value: 'Howdy', label: 'Howdy' },
               { value: 'Konichiwa', label: 'Konichiwa' },
+              { value: 'Bongiorno', label: 'Bongiorno' },
+              { value: 'Bon dia', label: 'Bondia' },
             ]}
           />
           or upload an image
