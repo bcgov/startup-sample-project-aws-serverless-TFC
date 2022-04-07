@@ -5,7 +5,7 @@ const Summary = () => {
   return (
     <Fragment>
       <Typography variant="h2" color="primary" gutterBottom>
-        Carles' simple Demo App
+        Carles' version of simple Demo App
       </Typography>
       <Typography variant="body1" paragraph>
         This content is located in client/src/components/form/Summary.js
