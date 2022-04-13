@@ -39,6 +39,8 @@ console.log(values)
             disabled={isDisabled}
             options={[
               { value: 'Aloha', label: 'Aloha' },
+              { value: 'Bon dia', label: 'Bondia' },
+              { value: 'Bongiorno', label: 'Bongiorno' },
               { value: 'Bonjour', label: 'Bonjour' },
               { value: 'Greetings and salutations', label: 'Greetings and salutations' },
               { value: 'Hello', label: 'Hello' },

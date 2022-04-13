@@ -23,7 +23,7 @@ resource "random_pet" "lambda_bucket_name" {
 
 resource "aws_s3_bucket" "web_distribution" {
   bucket = random_pet.lambda_bucket_name.id
-  acl    = "private"
+  # acl    = "private"
 }
 resource "aws_cloudfront_origin_access_identity" "web_distribution" {
 }

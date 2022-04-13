@@ -34,6 +34,7 @@ jobs:
           workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-backend" }
           EOF
 
+
           terraform init -backend-config=backend.hcl
           terraform destroy -auto-approve
 
