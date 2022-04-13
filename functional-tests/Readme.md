@@ -1,42 +1,102 @@
-# BDDStack
-
+# Sample Containers app BDD test
 ## Description
+Under `functional_test` folder you will find a set of scripts to run an automated test on the startup sample aws containers app. You may want to use it as a template to incorporate automated test to your app.
 
-Automated functional test suite for the https://www.bcdevexchange.org/ microprocurement application. 
+The app is written in groovy using the geb/spock framework. This framework makes the test easy to read and to follow.
+
+## Run the test locally with containers app running locally
+By locally we mean that you have the containers app running on a container on your machine at the address `baseUrl = "http://localhost:4000/"`.
+
+To run the test, open terminal and navigate to `.../functional-test` and execute 
+`./gradlew chromeTest --tests="FirstTest"`
+
+
+## Run the test locally with your app running in AWS and using BrowserStack
+In this case the app has been successfully deployed in AWS (check the Readme file at the root of this project). The test scripts are running locally in your machine firing a remote browser, in this case on the BrowserStack cloud, and the browser is opening the containers app page stored in AWS
+
+For this configuration you need 
+- The sample containers app installed in AWS. You also need the license plate (check `startup-sample-project-aws-containers/functional-tests/Readme.md` for more information)
+
+- An account with BrowserStack, once you have the account, you will access the values of `User Name` and `Access Key`. To run the test locally, you will need to type in terminal the following commands to add their values in your environment
+
+  `export LICENSE_PLATE=[LICENSE PLATE]`
+  
+  `export BROWSERSTACK_USERNAME=[BrowserStack user name]`
+  
+  `export BROWSERSTACK_ACCESS_KEY=[BrowserStack Access key]`
+
+once set, navigate to `../functional-test` and execute run the following command on your terminal
+
+`./gradlew remoteChromeTest --tests="FirstTest"`
+
+
+Note: You need to set LICENSE_PLATE as an env variable, as it is part of the URL of the containers app when the app is running in AWS. If the app is running locally on your machine (see section `Run the test locally with containers app running locally`), then GebConfig.groovy will default to "http://localhost:4000/"`  (it assumes that LICENSE_PLATE has not been set as env variable and is therefore null)
+
+Note: The specific capabilities of the browser that you are firing in BrowserStack are defined in GebConfig.groovy in the remoteChrome environment. The BrowserStack username and Access key are not hardcoded but retrieved through environmental variables
+## Run the test scripts on GitHub CI/CD pipeline using actions firing a browser in BrowserStack cloud 
+Currently the GitHub action `startup-sample-project-aws-containers/.github/workflows/browserStackTest.yml` will run the tests in GitHub controlling the browser hosted on Browser stack and connecting to the containers app stored in AWS.
+
+To run it you will nee to set the following secrets in GitHib
+
+The following secrets are the same that are required to install the app in AWS (check `startup-sample-project-aws-containers/functional-tests/Readme.md` for more information)
+- AWS_ACCESS_KEY_ID
+- AWS_ACCOUNTS_ECR_READ_ACCESS
+- AWS_ECR_URI
+- AWS_REGION
+- AWS_ROLE_TO_ASSUME
+- AWS_SECRET_ACCESS_KEY
+
+- MY_LICENSE_PLATE
+- TFC_TEAM_TOKEN
+
+The following secrets need to be set to run the test using BrowserStack servers
+- BROWSERSTACK_ACCESS_KEY
+- BROWSERSTACK_USERNAME
+
+The following secrets need to be set to mail the test results to the account of your choice
+- MAIL_ADDRESS
+- MAIL_PASSWORD
+- MAIL_SERVER
+- MAIL_USERNAME
 
 
 
 
 
-## Usage
-To run the test suite, open terminal and navigate to `.../functional-test` and execute `$ ./TestSuite.sh`.
-`./gradlew chromeTest --tests="FirstTest" --warning-mode all`
 
+## Running using other browsers
+- **ChromeHeadless**: 
+
+  The current configuration allows you to run the test locally in ChromeHeadless mode with the command
+
+  `./gradlew chromeHeadlessTest --tests="FirstTest"`
 
 - **Firefox**: 
 
-- **Safari**: Same bugs as in Firefox. I have not tried further.
+  `./gradlew firefoxTest --tests="FirstTest"`
 
-- **ChromeHeadless**:
+  for the headless version
 
-
-## Pitfalls and weirdness
-
+  `./gradlew firefoxHeadlessTest --tests="FirstTest"`
 
 
+- **Using BrowserStack**: 
 
-- The file `build.gradle` contains the versions used in this test suite.
-In addition, the versions of other important components are:
-   - java version "11.0.1" 2018-10-16 LTS
-   - gradle v5.0
-   - node v8.15.0
+  If you run the test in BrowserStack, the capabilities of the browser are defined in the remoteChrome environment. You may want to add more environments to the list. The following command will run the test in all the environments 
 
-check https://github.com/renatoathaydes/spock-reports for compatibility among java, Groovy, Spock and spock-reports
+  `./gradlew Test --tests="FirstTest"`
 
 
-## Questions and issues
+## Reports
+After every run, you will find two useful reports at
 
+`startup-sample-project-aws-containers/functional-tests/build/reports/spock`
 
+and at 
+`startup-sample-project-aws-containers/functional-tests/build/reports/tests/chromeTest`
+(there is a folder for each environment)
+
+The information provided by both reports overlaps, however there are some details. Visually, I find the spock report more pleasant, however, the reports under test allows to view logs messages you may have `println` to terminal, very useful in debugging mode.  
 
 ## Useful links:
 
@@ -51,3 +111,13 @@ check https://github.com/renatoathaydes/spock-reports for compatibility among ja
 <https://github.com/SeleniumHQ/selenium/wiki>
 
 
+Integrate with geb/spock
+https://github.com/mudassarsyed/geb-spock-mvn-browserstack
+​
+Github actions integration
+https://www.browserstack.com/docs/automate/selenium/github-actions#action-setup-env
+
+
+Check https://github.com/renatoathaydes/spock-reports for compatibility among java, Groovy, Spock and spock-reports
+
+Check https://github.com/AOEpeople/geb-spock-reports/blob/master/README.md for compatibility among geb-spock-reports,	spock-reports,	spock-core,	Groovy and JUnit
