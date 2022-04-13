@@ -34,6 +34,10 @@ jobs:
         run: |
           cd server
           cat <<EOF > backend.hcl
+          echo "**************"
+          echo ${{ env.organization }}
+          echo ${{ secrets.LICENCEPLATE }}
+          echo "**************"
           organization = "${{ env.organization }}"
           workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-backend" }
           EOF
