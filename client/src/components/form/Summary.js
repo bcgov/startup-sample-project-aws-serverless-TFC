@@ -4,8 +4,8 @@ import Typography from '@material-ui/core/Typography';
 const Summary = () => {
   return (
     <Fragment>
-      <Typography variant="h2" color="primary" gutterBottom>
-        Carles' version of simple Demo App
+      <Typography variant="h2" color="primary" id="pageHeader" gutterBottom>
+        Simple Demo App
       </Typography>
       <Typography variant="body1" paragraph>
         This content is located in client/src/components/form/Summary.js
