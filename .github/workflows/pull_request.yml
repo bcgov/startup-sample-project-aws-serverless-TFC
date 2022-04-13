@@ -1,8 +1,9 @@
 name: Node.js CI
 
 on:
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
+  #pull_request:
+  #  branches: [main]
 env:
   environment: dev
   organization: bcgov
@@ -35,8 +36,8 @@ jobs:
           cd server
           cat <<EOF > backend.hcl
           echo "**************"
-          echo ${{ env.organization }}
-          echo ${{ secrets.LICENCEPLATE }}
+          echo "${{ env.organization }}"
+          echo "${{ secrets.LICENCEPLATE }}"
           echo "**************"
           organization = "${{ env.organization }}"
           workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-backend" }
