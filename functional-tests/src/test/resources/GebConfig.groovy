@@ -18,13 +18,8 @@ import org.openqa.selenium.remote.LocalFileDetector
 
 def env = System.getenv()
 
-// Setting the baseUrl, it is the url used by the automation as root page
-if (System.getenv('LICENSE_PLATE') == null) {// LICENSE_PLATE is se as env variable in the browserStackTest.yml file.
-	baseUrl = "http://localhost:4000/"   //When running the container in your local machine, otherwise is set in the GitHub action
-}
-else {
-	baseUrl= "https://startup-sample-project.${env['LICENSE_PLATE']}-dev.nimbus.cloud.gov.bc.ca/"
-}
+
+baseUrl= "https://d1fpjpfq14ypcm.cloudfront.net/"
 
 println "BaseURL ===> $baseUrl" //printing the baseUrl used by the test
 

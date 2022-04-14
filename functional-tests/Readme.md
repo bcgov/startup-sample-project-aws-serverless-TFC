@@ -10,7 +10,7 @@ By locally we mean that you have the containers app running on a container on yo
 To run the test, open terminal and navigate to `.../functional-test` and execute 
 `./gradlew chromeTest --tests="FirstTest"`
 
-
+BC Gov Startup Sample Project
 ## Run the test locally with your app running in AWS and using BrowserStack
 In this case the app has been successfully deployed in AWS (check the Readme file at the root of this project). The test scripts are running locally in your machine firing a remote browser, in this case on the BrowserStack cloud, and the browser is opening the containers app page stored in AWS
 
