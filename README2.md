@@ -23,3 +23,13 @@ The github actions will trigger on a pull request creation and merge.
 
 NOTE: make sure you are creating pull requests/ merging within your fork
 
+
+#### Testing
+For how to use the test associated to this project, please check the README file under `functional-tests`
+
+
+## Testing Thanks
+
+Thanks to BrowserStack for Testing Tool support via OpenSource Licensing ![BrowserStack](docs/images/browserstack-logo-white-small.png)
+
+

@@ -90,10 +90,10 @@ def NewPGR =NewPG.sort().reverse()
     where:
        testGreeting      | testPreviousGreeting | iteration
        "Aloha"           | _                    | 1 
-       "Hello"           | "Aloha"              | 2
-       "Bonjour"         | "Hello"              | 3
-       "Konichiwa"       | "Bonjour"            | 4
-       "Howdy"           | "Konichiwa"          | 5
+     //  "Hello"           | "Aloha"              | 2
+     //  "Bonjour"         | "Hello"              | 3
+     //  "Konichiwa"       | "Bonjour"            | 4
+     //  "Howdy"           | "Konichiwa"          | 5
 
      }
 
