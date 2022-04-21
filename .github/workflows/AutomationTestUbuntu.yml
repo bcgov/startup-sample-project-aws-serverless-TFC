@@ -41,14 +41,14 @@ jobs:
            echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
     
     - name: Install AWS CLI version ${{ matrix.AWS_CLI_VERSION }}
-        uses: unfor19/install-aws-cli-action@master
-        with:
-          version: ${{ matrix.AWS_CLI_VERSION }}
+      uses: unfor19/install-aws-cli-action@master
+      with:
+        version: ${{ matrix.AWS_CLI_VERSION }}
 
     - name: Confirm the AWS CLI version   
       run: aws --version
       
-    - name: Confirm the AWS CLI version   
+    - name: Save existing distributions to a file   
       run: aws cloudfront list-distributions | grep DomainName | grep DomainName >> distributions.txt
 
     - name: list files   
