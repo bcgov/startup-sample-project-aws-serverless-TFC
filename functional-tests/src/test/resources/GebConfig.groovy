@@ -29,6 +29,8 @@ def baseurl
 //It's purpose is to be able to find the url of the serverless app from the cloudfront distribution list.
 def proc = "aws cloudfront list-distributions".execute() | "grep DomainName".execute() 
 def output= proc.text
+
+println ">>>>>>>>>>" + output
 def domainCrumble = output.tokenize(",")
 def int i=0
 for(i=0; i<domainCrumble.size();i++){

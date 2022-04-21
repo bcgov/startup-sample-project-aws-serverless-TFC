@@ -20,6 +20,8 @@ class FirstTest extends GebReportingSpec {
   def "Go to Entry Page and verify the title" () {
     given: "Starting from the Entry Page"
         waitFor {to EntryPage}
+
+        println Header1.text() 
         assert Header1.text() == "Simple Demo App"   //Check the title
 
     when: "Click on the Drop down to expand the drop down options, select #Greeting  and click Submit button"
