@@ -41,7 +41,6 @@ jobs:
            echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
     
     - name: Install AWS CLI version ${{ matrix.AWS_CLI_VERSION }}
-        id: install-aws-cli
         uses: unfor19/install-aws-cli-action@master
         with:
           version: ${{ matrix.AWS_CLI_VERSION }}
