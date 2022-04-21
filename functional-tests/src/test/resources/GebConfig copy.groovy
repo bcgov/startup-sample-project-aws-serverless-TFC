@@ -25,6 +25,17 @@ baseUrl= "https://d3qkdfho08icid.cloudfront.net"
 
 println "BaseURL ===> $baseUrl" //printing the baseUrl used by the test
 
+
+
+def proc = "ls".execute()
+def b = new StringBuffer()
+proc.consumeProcessErrorStream(b)
+
+println proc.text
+println b.toString()
+
+
+
 waiting {
 	timeout = 20  //seconds, if nothing happens stop the run 
 	retryInterval = 1

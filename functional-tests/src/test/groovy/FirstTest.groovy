@@ -38,10 +38,53 @@ class FirstTest extends GebReportingSpec {
 
     then: "Confirm we have arrived to the Entry page and confirm the current greeting and the previous one have been saved and it is displayed"    
         assert(waitFor{at EntryPage})
-        //sleep(500)
-        assert waitFor{PreviousGreetings.$("td")[2].text().contains(testGreeting)}
+        sleep(1500)
+
+        def PG2= waitFor{PreviousGreetings.$("tr")} //get all the rows
+
+//println "************"
+    
+      //println PreviousGreetings.$("tr").size()
+      //println $("table",id:"previousGreetings").$("tr")[0].size()
+      //println  PG2.size()
+      //println PG2[0].size()
+      //println PG2[0].$("td").size()
+
+def NewPG= []
+    for (int i : (0..<PG2.size())) {
+   
+        //println PG2[i].$("td")[0].text()
+       // println PG2[i].$("td")[1].text()
+       // println PG2[i].$("td")[2].text()
+
+      NewPG << PG2[i].$("td")[0].text()+PG2[i].$("td")[1].text()+PG2[i].$("td")[2].text()
+
+    } 
+println 'Not Reversed'
+NewPG.sort()
+    for (int i : (0..<NewPG.size())) {
+   
+        println NewPG[i]
+
+    } 
+//println "************"
+//println 'Reversed'
+def NewPGR =NewPG.sort().reverse()
+   // for (int i : (0..<NewPGR.size())) {
+   
+   //     println NewPGR[i]
+
+   // } 
+
+
+//println "************"
+
+
+
+
+        assert NewPGR[0].contains(testGreeting)
         if (iteration>1){
-        assert waitFor{PreviousGreetings.$("td")[5].text().contains(testPreviousGreeting)}    
+        assert NewPGR[1].contains(testPreviousGreeting)    
         }
 
     where:
