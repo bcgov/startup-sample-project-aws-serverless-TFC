@@ -18,28 +18,8 @@ import org.openqa.selenium.remote.LocalFileDetector
 
 def env = System.getenv()
 
-def baseurl
+baseUrl=env['BASEURL']
 
-//baseUrl= "https://d3qkdfho08icid.cloudfront.net"
-//baseUrl= "https://startup-sample-project.td5cou-dev.nimbus.cloud.gov.bc.ca"
-
-
-
-//The following section requires aws cli installed on your machine and the corresponding security tokens.
-//It's purpose is to be able to find the url of the serverless app from the cloudfront distribution list.
-def proc = "aws cloudfront list-distributions".execute() | "grep DomainName".execute() 
-def output= proc.text
-
-println ">>>>>>>>>>" + output
-def domainCrumble = output.tokenize(",")
-def int i=0
-for(i=0; i<domainCrumble.size();i++){
-	if(domainCrumble[i].tokenize(":")[1].contains("testing-bucket"))//this seems to be the origin, will need to check if this changes
-	{	
-		baseUrl="https://" + domainCrumble[i-1].tokenize(":")[1].replaceAll("\\s","").replaceAll("\"", "")
-		break
-	}
-}
 
 println "BaseURL ===> $baseUrl" //printing the baseUrl used by the test
 
