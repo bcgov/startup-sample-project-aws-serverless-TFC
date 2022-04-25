@@ -1,21 +1,51 @@
-# Sample Containers app BDD test
+# Sample Serverless app BDD test
 ## Description
 Under `functional_test` folder you will find a set of scripts to run an automated test on the startup sample aws containers app. You may want to use it as a template to incorporate automated test to your app.
 
 The app is written in groovy using the geb/spock framework. This framework makes the test easy to read and to follow.
 
-## Run the test locally with containers app running locally
-By locally we mean that you have the containers app running on a container on your machine at the address `baseUrl = "http://localhost:4000/"`.
+## Run the test
+As currently written, the BASEURL is read from the environment, so, when running locally.  first set this value by typing on the command line 
+`export BASEURL="https://d3qkdfho08icid.cloudfront.net/"`
+
+The find the specific address you need to log into Cloudfront after installing the application. 
 
 To run the test, open terminal and navigate to `.../functional-test` and execute 
 `./gradlew chromeTest --tests="FirstTest"`
 
-BC Gov Startup Sample Project
-## Run the test locally with your app running in AWS and using BrowserStack
-In this case the app has been successfully deployed in AWS (check the Readme file at the root of this project). The test scripts are running locally in your machine firing a remote browser, in this case on the BrowserStack cloud, and the browser is opening the containers app page stored in AWS
+Alternatively, you can hardcode the address in the GebConfig.groovy file
+
+To run the test, cd to `functional-tests` folder type on terminal
+
+  `./gradlew chromeTest --tests="FirstTest"`
+
+
+
+When running the test in GitHub actions, set the BASEURL as a GitHub secret
+
+
+## Reports
+After every run, you will find two useful reports at
+
+`startup-sample-project-aws-serverless/functional-tests/build/reports/spock`
+
+and at 
+`startup-sample-project-aws-serverless/functional-tests/build/reports/tests/chromeTest`
+(there is a folder for each environment)
+
+The information provided by both reports overlaps, however there are some details. Visually, I find the spock report more pleasant, however, the reports under test allows to view logs messages you may have `println` to terminal, very useful in debugging mode.  
+
+## Improvement
+If you have aws cli installed on your machine (an the credentials as env variables) you can type the command
+`aws cloudfront list-distributions`
+and with some manipulation find the BASEURL. Unfortunately, this does not work when executing the test from the GitHub actions environment due to the way the account is configured. You may ask to the ECF team to create an account without this limitation.
+
+
+## Run the test using BrowserStack
+When using BrowserStack, the test scripts are running locally in your machine (or in GitHub) firing a remote browser in BrowserStack, in this case on the BrowserStack cloud, and the browser is opening the containers app page stored in AWS
 
 For this configuration you need 
-- The sample containers app installed in AWS. You also need the license plate (check `startup-sample-project-aws-containers/functional-tests/Readme.md` for more information)
+- The sample serverless app installed in AWS. You also need the license plate (check `startup-sample-project-aws-serverless/Readme.md` for more information)
 
 - An account with BrowserStack, once you have the account, you will access the values of `User Name` and `Access Key`. To run the test locally, you will need to type in terminal the following commands to add their values in your environment
 
@@ -30,38 +60,25 @@ once set, navigate to `../functional-test` and execute run the following command
 `./gradlew remoteChromeTest --tests="FirstTest"`
 
 
-Note: You need to set LICENSE_PLATE as an env variable, as it is part of the URL of the containers app when the app is running in AWS. If the app is running locally on your machine (see section `Run the test locally with containers app running locally`), then GebConfig.groovy will default to "http://localhost:4000/"`  (it assumes that LICENSE_PLATE has not been set as env variable and is therefore null)
-
-Note: The specific capabilities of the browser that you are firing in BrowserStack are defined in GebConfig.groovy in the remoteChrome environment. The BrowserStack username and Access key are not hardcoded but retrieved through environmental variables
-## Run the test scripts on GitHub CI/CD pipeline using actions firing a browser in BrowserStack cloud 
-Currently the GitHub action `startup-sample-project-aws-containers/.github/workflows/browserStackTest.yml` will run the tests in GitHub controlling the browser hosted on Browser stack and connecting to the containers app stored in AWS.
-
-To run it you will nee to set the following secrets in GitHib
-
-The following secrets are the same that are required to install the app in AWS (check `startup-sample-project-aws-containers/functional-tests/Readme.md` for more information)
-- AWS_ACCESS_KEY_ID
-- AWS_ACCOUNTS_ECR_READ_ACCESS
-- AWS_ECR_URI
-- AWS_REGION
-- AWS_ROLE_TO_ASSUME
-- AWS_SECRET_ACCESS_KEY
-
-- MY_LICENSE_PLATE
-- TFC_TEAM_TOKEN
-
-The following secrets need to be set to run the test using BrowserStack servers
-- BROWSERSTACK_ACCESS_KEY
-- BROWSERSTACK_USERNAME
-
-The following secrets need to be set to mail the test results to the account of your choice
-- MAIL_ADDRESS
-- MAIL_PASSWORD
-- MAIL_SERVER
-- MAIL_USERNAME
+** Important Note **
+Currently, it is not possible to use BrowserStack to test the serverless app, neither from your local machine or from GitHub. The reason is the BrowserStack servers are located outside Canada. The Enterprise Cloud Factory by default enforces geofencing of the environments. In this context, BroserStack running in a server farm outside Canada, has its connection request refused. 
 
 
+## Run the test scripts on GitHub CI/CD pipeline
+Currently it is not possible to run the test automatically in a CI/CD GiHub Actions Pipeline. The reason is the same as Browser Stack: GitHub server farm is located outside Canada and the AWS environment is geofenced, so the test scripts have their connection request rejected
 
+Currently, the manually triggered action `AutomationTestUbuntu.yml` runs automatically the tests in GitHub and `browserStackTest.yml` to run the test using BrowserStack
 
+The following secrets need to be set to run the test:
+
+- `BROWSERSTACK_ACCESS_KEY`
+- `BROWSERSTACK_USERNAME`
+
+The following secrets need to be set to mail the test results to the account of your choice (You may comment out the section that sends the eamil in the yml script)
+- `MAIL_ADDRESS`
+- `MAIL_PASSWORD`
+- `MAIL_SERVER`
+- `MAIL_USERNAME`
 
 
 ## Running using other browsers
@@ -80,20 +97,14 @@ The following secrets need to be set to mail the test results to the account of 
   `./gradlew firefoxHeadlessTest --tests="FirstTest"`
 
 
-- **Using BrowserStack**: 
-
-  If you run the test in BrowserStack, the capabilities of the browser are defined in the remoteChrome environment. You may want to add more environments to the list. The following command will run the test in all the environments 
-
-  `./gradlew Test --tests="FirstTest"`
-
 
 ## Reports
 After every run, you will find two useful reports at
 
-`startup-sample-project-aws-containers/functional-tests/build/reports/spock`
+`startup-sample-project-aws-serverless/functional-tests/build/reports/spock`
 
 and at 
-`startup-sample-project-aws-containers/functional-tests/build/reports/tests/chromeTest`
+`startup-sample-project-aws-serverless/functional-tests/build/reports/tests/chromeTest`
 (there is a folder for each environment)
 
 The information provided by both reports overlaps, however there are some details. Visually, I find the spock report more pleasant, however, the reports under test allows to view logs messages you may have `println` to terminal, very useful in debugging mode.  

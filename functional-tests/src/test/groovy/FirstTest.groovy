@@ -6,16 +6,13 @@ import pages.app.ConfirmationPage
 import spock.lang.Unroll
 import spock.lang.Narrative
 import spock.lang.Title
-
 import org.junit.Test
-//import org.junit.jupiter.api.Test
-
+/
 
 @Narrative('''Basic functionality test''')
 
 @Title("Load the Containers Sample application, check some elements, interact with the DB")
 class FirstTest extends GebReportingSpec {
-
 
   def "Go to Entry Page and verify the title" () {
     given: "Starting from the Entry Page"
@@ -44,58 +41,30 @@ class FirstTest extends GebReportingSpec {
 
         def PG2= waitFor{PreviousGreetings.$("tr")} //get all the rows
 
-//println "************"
-    
-      //println PreviousGreetings.$("tr").size()
-      //println $("table",id:"previousGreetings").$("tr")[0].size()
-      //println  PG2.size()
-      //println PG2[0].size()
-      //println PG2[0].$("td").size()
-
-def NewPG= []
-    for (int i : (0..<PG2.size())) {
-   
-        //println PG2[i].$("td")[0].text()
-       // println PG2[i].$("td")[1].text()
-       // println PG2[i].$("td")[2].text()
-
-      NewPG << PG2[i].$("td")[0].text()+PG2[i].$("td")[1].text()+PG2[i].$("td")[2].text()
-
-    } 
-println 'Not Reversed'
-NewPG.sort()
-    for (int i : (0..<NewPG.size())) {
-   
-        println NewPG[i]
-
-    } 
-//println "************"
-//println 'Reversed'
-def NewPGR =NewPG.sort().reverse()
-   // for (int i : (0..<NewPGR.size())) {
-   
-   //     println NewPGR[i]
-
-   // } 
+        def NewPG= []
+            for (int i : (0..<PG2.size())) {
+              NewPG << PG2[i].$("td")[0].text()+PG2[i].$("td")[1].text()+PG2[i].$("td")[2].text()
+            } 
+        NewPG.sort()
 
 
-//println "************"
-
-
-
+        def NewPGR =NewPG.sort().reverse()
+          // for (int i : (0..<NewPGR.size())) {
+          //     println NewPGR[i]
+          // } 
 
         assert NewPGR[0].contains(testGreeting)
         if (iteration>1){
-        assert NewPGR[1].contains(testPreviousGreeting)    
+          assert NewPGR[1].contains(testPreviousGreeting)    
         }
 
     where:
        testGreeting      | testPreviousGreeting | iteration
        "Aloha"           | _                    | 1 
-     //  "Hello"           | "Aloha"              | 2
-     //  "Bonjour"         | "Hello"              | 3
-     //  "Konichiwa"       | "Bonjour"            | 4
-     //  "Howdy"           | "Konichiwa"          | 5
+       "Hello"           | "Aloha"              | 2
+       "Bonjour"         | "Hello"              | 3
+       "Konichiwa"       | "Bonjour"            | 4
+       "Howdy"           | "Konichiwa"          | 5
 
      }
 
