@@ -1,8 +1,9 @@
 name: Node.js CI
 
 on:
+  #workflow_dispatch:
   pull_request:
-    branches: [main]
+  branches: [main]
 env:
   environment: dev
   organization: bcgov
@@ -29,31 +30,31 @@ jobs:
         run: |
           cd server/lambda
           npm install
-
       - name: Deploying back-end using terraform
         run: |
+
+          echo "**************"
+          echo "${{ env.organization }}"
+          echo "${{ secrets.LICENCEPLATE }}"
+          echo "**************"
+          
           cd server
           cat <<EOF > backend.hcl
           organization = "${{ env.organization }}"
           workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-backend" }
           EOF
-
           terraform init -backend-config=backend.hcl
           terraform plan
-
       - name: Building front-end and deploying Frontend using terraform
         run: |
           cd server
           terraform output > ../client/.env
           cd ../client
           npm install
-
           CI=false npm run build
-
           cat <<EOF > backend.hcl
           organization = "${{ env.organization }}"
           workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-frontend" }
           EOF
-
           terraform init -backend-config=backend.hcl
           terraform plan
