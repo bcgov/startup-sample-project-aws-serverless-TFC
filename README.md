@@ -15,7 +15,7 @@ you'll need to add two github secrets:
   - To access the TFC_Team_Token: Log to AWS> Search for Parameter Store > the key is under /octk/tfc/team_token
   - Once the app has been built, you should be able to log into AWS with your IDIR account (2FA). Once in AWS search for Cloudfront and then click on Distributions (If you can not see it click the hamburger on the top left corner). The Distributions dashboard shows the Domain name, you can use that domain name to interact with you app.
 
-a
+
 #### Pipeline
 The github actions will trigger on a pull request creation and merge.
 - Creating a pull request will run a `terraform plan` and outline everything that will be deployed into your AWS accounts, but will not create anything.
