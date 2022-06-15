@@ -29,7 +29,7 @@ detect the misconfiguration in IaC file and  Common Vulnerabilities and Exposure
 
  - One github action workflow added for SCA and IaC scanning : Checkov.yml will be triggered when there is a git push on `main` branch.
  - Free Tier has reduced features and 50 resource limitation 
- - VCS Integration for finding and fixing misconfiguration
+ - VCS Integration for additional features
 
 
 #### Testing
