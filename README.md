@@ -24,10 +24,13 @@ The github actions will trigger on a pull request creation and merge.
 NOTE: make sure you are creating pull requests/ merging within your fork
 
 #### Security 
-To adopt checkov of bridgecrew.io, a static scanning tool, for IaC and SCA (Software Composition Analysis), in CI/CD pipeline to automatically 
+To adopt checkov of bridgecrew.io, a static scanning tool for IaC and SCA (Software Composition Analysis), in CI/CD pipeline to automatically 
 detect the misconfiguration in IaC file and  Common Vulnerabilities and Exposures (CVEs) in the open source packages and images in the provision. 
 
-_ A github action workflow : Checkov.yml will be triggered when there is a git push on `main` branch.  
+ - One github action workflow added for SCA and IaC scanning : Checkov.yml will be triggered when there is a git push on `main` branch.
+ - Free Tier has reduced features and 50 resource limitation 
+ - VCS Integration for finding and fixing misconfiguration
+
 
 #### Testing
 For how to use the test associated to this project, please check the README file under `functional-tests`
