@@ -40,9 +40,4 @@ For how to use the test associated to this project, please check the README file
 
 Thanks to BrowserStack for Testing Tool support via OpenSource Licensing ![BrowserStack](docs/images/browserstack-logo-white-small.png)
 
-[![Infrastructure Tests](https://www.bridgecrew.cloud/badges/github/bruce-wh-li/startup-sample-project-aws-serverless/cis_aws)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=bruce-wh-li%2Fstartup-sample-project-aws-serverless&benchmark=CIS+AWS+V1.2)
-
-
-[![Infrastructure Tests](https://www.bridgecrew.cloud/badges/github/bruce-wh-li/startup-sample-project-aws-serverless/cis_aws_13)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=bruce-wh-li%2Fstartup-sample-project-aws-serverless&benchmark=CIS+AWS+V1.3)
-
-[![Infrastructure Tests](https://www.bridgecrew.cloud/badges/github/bruce-wh-li/startup-sample-project-aws-serverless/iso)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=bruce-wh-li%2Fstartup-sample-project-aws-serverless&benchmark=ISO27001)
+[![Infrastructure Tests](https://www.bridgecrew.cloud/badges/github/bruce-wh-li/startup-sample-project-aws-serverless/cis_aws)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=bruce-wh-li%2Fstartup-sample-project-aws-serverless&benchmark=CIS+AWS+V1.2)[![Infrastructure Tests](https://www.bridgecrew.cloud/badges/github/bruce-wh-li/startup-sample-project-aws-serverless/cis_aws_13)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=bruce-wh-li%2Fstartup-sample-project-aws-serverless&benchmark=CIS+AWS+V1.3)[![Infrastructure Tests](https://www.bridgecrew.cloud/badges/github/bruce-wh-li/startup-sample-project-aws-serverless/iso)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=bruce-wh-li%2Fstartup-sample-project-aws-serverless&benchmark=ISO27001)
