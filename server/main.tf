@@ -24,7 +24,7 @@ resource "random_pet" "lambda_bucket_name" {
 
 resource "aws_s3_bucket" "lambda_bucket" {
   bucket        = random_pet.lambda_bucket_name.id
-  acl           = "private"
+  # acl           = "private"
   force_destroy = true
 }
 
@@ -35,7 +35,7 @@ resource "random_pet" "upload_bucket_name" {
 
 resource "aws_s3_bucket" "upload_bucket" {
   bucket        = random_pet.upload_bucket_name.id
-  acl           = "private"
+  # acl           = "private"
   force_destroy = true
 }
 
@@ -47,7 +47,7 @@ data "archive_file" "lambda_greetings_server" {
 }
 
 resource "aws_s3_bucket_object" "lambda_greetings_server" {
-  bucket = aws_s3_bucket.lambda_bucket.id
+  bucket = aws_s3_bucket.lambda_bucket.id   #argument deprecated
   key    = "greetings-server.zip"
   source = data.archive_file.lambda_greetings_server.output_path
   etag   = filemd5(data.archive_file.lambda_greetings_server.output_path)
@@ -65,8 +65,8 @@ resource "aws_dynamodb_table" "ssp-greetings" {
   range_key = "id"
 
   billing_mode   = "PAY_PER_REQUEST"
-  read_capacity  = 5
-  write_capacity = 5
+  # read_capacity  = 5
+  # write_capacity = 5
   attribute {
     name = "pid"
     type = "S"

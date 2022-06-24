@@ -135,7 +135,9 @@ app.get(`${apiBaseUrl}/greeting/:latest`,
   asyncMiddleware(async (req, res) => {
     if ('development' === process.env.NODE_ENV) {
       const greetingsCollection = dbClient.db.collection(collections.GREETINGS);
-      const greetingItems = await greetingsCollection.find({}, {sort:{$natural:-1}, limit: 10}).toArray();
+      const greetingItems = await greetingsCollection
+          .find({}, {sort:{$natural:-1}, limit: 100})
+          .toArray();
       logger.info('Reading from db: ' + JSON.stringify(greetingItems));
       return res.json({greetingItems});
     } else {
