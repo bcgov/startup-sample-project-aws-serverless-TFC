@@ -24,18 +24,14 @@ resource "random_pet" "lambda_bucket_name" {
 resource "aws_s3_bucket" "web_distribution" {
   bucket = random_pet.lambda_bucket_name.id
   acl    = "private"
+   versioning {
+   enabled = true
+  }
   #checkov:skip=CKV_AWS_145:Bucket encryption is automatically done by ASEA
   #checkov:skip=CKV_AWS_18:Bucket logging is not required for sample application
   #checkov:skip=CKV2_AWS_6:Block Public Access is automatically done by ASEA
   #checkov:skip=CKV_AWS_19:Serverside Encryption is automatically done by ASEA
   #checkov:skip=CKV_AWS_144:Bucket replication is not required for sample application
-}
-resource "aws_s3_bucket_versioning" "bucket_versioning" {
-  bucket = aws_s3_bucket.web_distribution.id
-
-  versioning_configuration {
-    status = "Enabled"
-  }
 }
 resource "aws_cloudfront_origin_access_identity" "web_distribution" {
 }
