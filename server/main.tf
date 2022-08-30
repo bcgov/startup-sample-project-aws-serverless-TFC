@@ -24,8 +24,16 @@ resource "random_pet" "lambda_bucket_name" {
 
 resource "aws_s3_bucket" "lambda_bucket" {
   bucket        = random_pet.lambda_bucket_name.id
-  # acl           = "private"
+  acl           = "private"
+  #checkov:skip=CKV_AWS_18:Access logging is not required for sample application
+  #checkov:skip=CKV2_AWS_6:S3 Block Public Access is automatically done by ASEA
+  #checkov:skip=CKV_AWS_19:Obejct encryption is automatically done by ASEA
+  #checkov:skip=CKV_AWS_144:Bucket replication is not required for sample application
+  #checkov:skip=CKV_AWS_145:Bucket encryption is automatically done by ASEA
   force_destroy = true
+  versioning {
+    enabled = true
+  }
 }
 
 resource "random_pet" "upload_bucket_name" {
@@ -35,8 +43,16 @@ resource "random_pet" "upload_bucket_name" {
 
 resource "aws_s3_bucket" "upload_bucket" {
   bucket        = random_pet.upload_bucket_name.id
-  # acl           = "private"
+  acl           = "private"
+  #checkov:skip=CKV_AWS_18:Access logging is not required for sample application
+  #checkov:skip=CKV2_AWS_6:S3 Block Public Access is automatically done by ASEA
+  #checkov:skip=CKV_AWS_19:Obejct encryption is automatically done by ASEA
+  #checkov:skip=CKV_AWS_144:Bucket replication is not required for sample application
+  #checkov:skip=CKV_AWS_145:Bucket encryption is automatically done by ASEA
   force_destroy = true
+  versioning {
+    enabled = true
+  }
 }
 
 
@@ -51,6 +67,7 @@ resource "aws_s3_bucket_object" "lambda_greetings_server" {
   key    = "greetings-server.zip"
   source = data.archive_file.lambda_greetings_server.output_path
   etag   = filemd5(data.archive_file.lambda_greetings_server.output_path)
+  #checkov:skip=CKV_AWS_186:Encryption is automatically done by ASEA
 }
 
 resource "random_pet" "DB_NAME" {
@@ -63,7 +80,7 @@ resource "aws_dynamodb_table" "ssp-greetings" {
   name      = random_pet.DB_NAME.id
   hash_key  = "pid"
   range_key = "id"
-
+  #checkov:skip=CKV_AWS_119:Encryption is managed by dynamodb
   billing_mode   = "PAY_PER_REQUEST"
   # read_capacity  = 5
   # write_capacity = 5
@@ -75,12 +92,10 @@ resource "aws_dynamodb_table" "ssp-greetings" {
     name = "id"
     type = "S"
   }
+  point_in_time_recovery {
+   enabled = true
+  }
 }
-
-
-
-
-
 
 resource "aws_iam_role_policy" "lambda_policy" {
   name   = "lambda_policy"
@@ -170,12 +185,16 @@ resource "aws_iam_role" "lambda_exec" {
 
 resource "aws_lambda_function" "greetings_server_lambda" {
   function_name = "greetings_server_fn"
-
+  #checkov:skip=CKV_AWS_50:X-ray tracing is not required for this sample application
+  #checkov:skip=CKV_AWS_116:DLQ(Dead Letter Queue) is not required for this sample application
+  #checkov:skip=CKV_AWS_117:VPC Configuration is not required for the sample application function
+  #checkov:skip=CKV_AWS_173:The environment variables below are encrypted at rest with the default Lambda service key.
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_bucket_object.lambda_greetings_server.key
 
   runtime = "nodejs12.x"
   handler = "./lambda.handler"
+  reserved_concurrent_executions = -1
 
   source_code_hash = data.archive_file.lambda_greetings_server.output_base64sha256
 
@@ -192,6 +211,10 @@ resource "aws_lambda_function" "greetings_server_lambda" {
 
 resource "aws_api_gateway_rest_api" "apiLambda" {
   name = "myAPI"
+    lifecycle {
+    create_before_destroy = true
+  }
+
 }
 
 
@@ -207,6 +230,7 @@ resource "aws_api_gateway_method" "proxyMethod" {
   resource_id   = aws_api_gateway_resource.proxy.id
   http_method   = "ANY"
   authorization = "NONE"
+ #checkov:skip=CKV_AWS_59:API_KEY authotization is not required for this sample application 
 }
 
 resource "aws_api_gateway_integration" "lambda" {
@@ -227,6 +251,7 @@ resource "aws_api_gateway_method" "proxy_root" {
   resource_id   = aws_api_gateway_rest_api.apiLambda.root_resource_id
   http_method   = "ANY"
   authorization = "NONE"
+  #checkov:skip=CKV_AWS_59:API_KEY authotization is not required for this sample application
 }
 
 resource "aws_api_gateway_integration" "lambda_root" {
@@ -248,6 +273,10 @@ resource "aws_api_gateway_deployment" "apideploy" {
 
   rest_api_id = aws_api_gateway_rest_api.apiLambda.id
   stage_name  = "test"
+    lifecycle {
+    create_before_destroy = true
+  }
+
 }
 
 

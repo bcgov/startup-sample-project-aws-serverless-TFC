@@ -23,7 +23,15 @@ resource "random_pet" "lambda_bucket_name" {
 
 resource "aws_s3_bucket" "web_distribution" {
   bucket = random_pet.lambda_bucket_name.id
-  # acl    = "private"
+  acl    = "private"
+   versioning {
+   enabled = true
+  }
+  #checkov:skip=CKV_AWS_145:Bucket encryption is automatically done by ASEA
+  #checkov:skip=CKV_AWS_18:Bucket logging is not required for sample application
+  #checkov:skip=CKV2_AWS_6:Block Public Access is automatically done by ASEA
+  #checkov:skip=CKV_AWS_19:Serverside Encryption is automatically done by ASEA
+  #checkov:skip=CKV_AWS_144:Bucket replication is not required for sample application
 }
 resource "aws_cloudfront_origin_access_identity" "web_distribution" {
 }
@@ -56,7 +64,9 @@ resource "aws_cloudfront_distribution" "web_distribution" {
       origin_access_identity = aws_cloudfront_origin_access_identity.web_distribution.cloudfront_access_identity_path
     }
   }
-
+  #checkov:skip=CKV_AWS_86:Cloudfront distribution logging is not required for sample application
+  #checkov:skip=CKV_AWS_68:WAF not required for sample application
+  #checkov:skip=CKV2_AWS_32:Response policy headers not required for sample application
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
@@ -80,6 +90,7 @@ resource "aws_cloudfront_distribution" "web_distribution" {
 
   viewer_certificate {
     cloudfront_default_certificate = true
+    minimum_protocol_version       = "TLSv1.2_2018"
   }
 
   restrictions {
@@ -106,6 +117,8 @@ locals {
 resource "aws_s3_bucket_object" "site_files" {
   # Enumerate all the files in ./src
   for_each = fileset(local.src_dir, "**")
+
+  #checkov:skip=CKV_AWS_186:S3 Encryption is automatically done by ASEA
 
   # Create an object from each
   bucket = aws_s3_bucket.web_distribution.id
