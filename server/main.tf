@@ -3,7 +3,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "3.9.0"
+      version ="~> 4.0.0"
     }
   }
 }
@@ -15,46 +15,23 @@ provider "aws" {
     role_arn = "arn:aws:iam::${var.target_aws_account_id}:role/BCGOV_${var.target_env}_Automation_Admin_Role"
   }
 }
-
-
-resource "random_pet" "lambda_bucket_name" {
-  prefix = "greetings-lambda"
-  length = 4
-}
-
-resource "aws_s3_bucket" "lambda_bucket" {
-  bucket        = random_pet.lambda_bucket_name.id
-  acl           = "private"
+data "aws_caller_identity" "current" {}
+resource "aws_s3_bucket" "buckets" {
   #checkov:skip=CKV_AWS_18:Access logging is not required for sample application
   #checkov:skip=CKV2_AWS_6:S3 Block Public Access is automatically done by ASEA
   #checkov:skip=CKV_AWS_19:Obejct encryption is automatically done by ASEA
   #checkov:skip=CKV_AWS_144:Bucket replication is not required for sample application
   #checkov:skip=CKV_AWS_145:Bucket encryption is automatically done by ASEA
-  force_destroy = true
-  versioning {
-    enabled = true
+  for_each = toset(["upload-bucket", "lambda-bucket"])
+  bucket = "${each.key}-${data.aws_caller_identity.current.account_id}-${var.aws_region}"
+}
+resource "aws_s3_bucket_versioning" "buckets" {
+  for_each = toset(["upload-bucket", "lambda-bucket"]) 
+  bucket = aws_s3_bucket.buckets[each.key].id
+  versioning_configuration {
+      status = "Enabled"
   }
 }
-
-resource "random_pet" "upload_bucket_name" {
-  prefix = "upload-bucket"
-  length = 2
-}
-
-resource "aws_s3_bucket" "upload_bucket" {
-  bucket        = random_pet.upload_bucket_name.id
-  acl           = "private"
-  #checkov:skip=CKV_AWS_18:Access logging is not required for sample application
-  #checkov:skip=CKV2_AWS_6:S3 Block Public Access is automatically done by ASEA
-  #checkov:skip=CKV_AWS_19:Obejct encryption is automatically done by ASEA
-  #checkov:skip=CKV_AWS_144:Bucket replication is not required for sample application
-  #checkov:skip=CKV_AWS_145:Bucket encryption is automatically done by ASEA
-  force_destroy = true
-  versioning {
-    enabled = true
-  }
-}
-
 
 data "archive_file" "lambda_greetings_server" {
   type        = "zip"
@@ -63,7 +40,7 @@ data "archive_file" "lambda_greetings_server" {
 }
 
 resource "aws_s3_bucket_object" "lambda_greetings_server" {
-  bucket = aws_s3_bucket.lambda_bucket.id   #argument deprecated
+  bucket = aws_s3_bucket.buckets["lambda-bucket"].id   #argument deprecated
   key    = "greetings-server.zip"
   source = data.archive_file.lambda_greetings_server.output_path
   etag   = filemd5(data.archive_file.lambda_greetings_server.output_path)
@@ -141,21 +118,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "s3:PutBucketCORS"
             ],
             "Resource": [
-                "${aws_s3_bucket.upload_bucket.arn}",
-                "${aws_s3_bucket.upload_bucket.arn}/*"
-            ]
-        },
-        {
-            "Sid": "VisualEditor2",
-            "Effect": "Allow",
-            "Action": [
-                "s3:PutObject",
-                "s3:GetObject",
-                "s3:PutBucketCORS"
-            ],
-            "Resource": [
-                "arn:aws:s3:::api-testing-bucket-kiran",
-                "arn:aws:s3:::api-testing-bucket-kiran/*"
+                "${aws_s3_bucket.buckets["upload-bucket"].arn}",
+                "${aws_s3_bucket.buckets["upload-bucket"].arn}/*"
             ]
         }
     ]
@@ -189,10 +153,10 @@ resource "aws_lambda_function" "greetings_server_lambda" {
   #checkov:skip=CKV_AWS_116:DLQ(Dead Letter Queue) is not required for this sample application
   #checkov:skip=CKV_AWS_117:VPC Configuration is not required for the sample application function
   #checkov:skip=CKV_AWS_173:The environment variables below are encrypted at rest with the default Lambda service key.
-  s3_bucket = aws_s3_bucket.lambda_bucket.id
+  s3_bucket = aws_s3_bucket.buckets["lambda-bucket"].id
   s3_key    = aws_s3_bucket_object.lambda_greetings_server.key
 
-  runtime = "nodejs12.x"
+  runtime = "nodejs14.x"
   handler = "./lambda.handler"
   reserved_concurrent_executions = -1
 
@@ -201,7 +165,7 @@ resource "aws_lambda_function" "greetings_server_lambda" {
   role = aws_iam_role.lambda_exec.arn
   environment {
     variables = {
-      bucketName = aws_s3_bucket.upload_bucket.id
+      bucketName = aws_s3_bucket.buckets["upload-bucket"].id
       DB_NAME    = random_pet.DB_NAME.id
     }
   }

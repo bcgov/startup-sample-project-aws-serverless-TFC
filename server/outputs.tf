@@ -3,13 +3,13 @@
 output "lambda_bucket_name" {
   description = "Name of the S3 bucket used to store function code."
 
-  value = aws_s3_bucket.lambda_bucket.id
+  value = aws_s3_bucket.buckets["lambda-bucket"].id
 }
 
 output "upload_bucket_name" {
   description = "Name of the S3 bucket used to store function code."
 
-  value = aws_s3_bucket.upload_bucket.id
+  value = aws_s3_bucket.buckets["upload-bucket"].id
 }
 
 # output "aws_dynamodb_table" {
