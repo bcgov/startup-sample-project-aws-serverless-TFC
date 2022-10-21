@@ -3,7 +3,7 @@ terraform {
 required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "3.9.0"
+      version = "~> 4.0.0"
     }
   }
 }
@@ -15,23 +15,20 @@ provider "aws" {
     role_arn = "arn:aws:iam::${var.target_aws_account_id}:role/BCGOV_${var.target_env}_Automation_Admin_Role"
   }
 }
-
-resource "random_pet" "lambda_bucket_name" {
-  prefix = "ssp-testing-bucket"
-  length = 4
-}
-
+data "aws_caller_identity" "current" {}
 resource "aws_s3_bucket" "web_distribution" {
-  bucket = random_pet.lambda_bucket_name.id
-  acl    = "private"
-   versioning {
-   enabled = true
-  }
+  bucket = "sample-app-${data.aws_caller_identity.current.account_id}-${var.aws_region}"
   #checkov:skip=CKV_AWS_145:Bucket encryption is automatically done by ASEA
   #checkov:skip=CKV_AWS_18:Bucket logging is not required for sample application
   #checkov:skip=CKV2_AWS_6:Block Public Access is automatically done by ASEA
   #checkov:skip=CKV_AWS_19:Serverside Encryption is automatically done by ASEA
   #checkov:skip=CKV_AWS_144:Bucket replication is not required for sample application
+}
+resource "aws_s3_bucket_versioning" "web_distribution" {
+  bucket = aws_s3_bucket.web_distribution.id
+  versioning_configuration {
+      status = "Enabled"
+  }
 }
 resource "aws_cloudfront_origin_access_identity" "web_distribution" {
 }
