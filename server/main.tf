@@ -153,6 +153,7 @@ resource "aws_lambda_function" "greetings_server_lambda" {
   #checkov:skip=CKV_AWS_116:DLQ(Dead Letter Queue) is not required for this sample application
   #checkov:skip=CKV_AWS_117:VPC Configuration is not required for the sample application function
   #checkov:skip=CKV_AWS_173:The environment variables below are encrypted at rest with the default Lambda service key.
+  #checkov:skip=CKV_AWS_272: "Ensure AWS Lambda function is configured to validate code-signing"
   s3_bucket = aws_s3_bucket.buckets["lambda-bucket"].id
   s3_key    = aws_s3_bucket_object.lambda_greetings_server.key
 
