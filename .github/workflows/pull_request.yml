@@ -6,7 +6,6 @@ on:
     branches: [main]
 env:
   environment: dev
-  organization: bcgov
 
 jobs:
   build:
@@ -21,10 +20,11 @@ jobs:
       - name: checkout the repo and building the Backend
         uses: actions/checkout@v2
 
-      - uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: ${{ env.TF_VERSION }}
-          cli_config_credentials_token: ${{ secrets.TFC_TEAM_TOKEN }}
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: ${{ secrets.TERRAFORM_DEPLOY_ROLE_ARN }}
+        aws-region: ca-central-1
 
       - name: building the backend
         run: |
@@ -34,17 +34,18 @@ jobs:
         run: |
 
           echo "**************"
-          echo "${{ env.organization }}"
           echo "${{ secrets.LICENCEPLATE }}"
           echo "**************"
           
           cd server
           cat <<EOF > backend.hcl
-          organization = "${{ env.organization }}"
-          workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-backend" }
+          bucket = "${{ secrets.S3_BACKEND_NAME }}"
+          key = "/${{ secrets.LICENCEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
+          dynamodb_table = "terraform-remote-state-lock-${{ secrets.LICENCEPLATE }}"
           EOF
           terraform init -backend-config=backend.hcl
           terraform plan
+
       - name: Building front-end and deploying Frontend using terraform
         run: |
           cd server
@@ -53,8 +54,9 @@ jobs:
           npm install
           CI=false npm run build
           cat <<EOF > backend.hcl
-          organization = "${{ env.organization }}"
-          workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-frontend" }
+          bucket = "${{ secrets.S3_BACKEND_NAME }}"
+          key = "/${{ secrets.LICENCEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
+          dynamodb_table = "terraform-remote-state-lock-${{ secrets.LICENCEPLATE }}"
           EOF
           terraform init -backend-config=backend.hcl
           terraform plan
