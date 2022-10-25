@@ -1,9 +1,9 @@
 terraform {
-  backend "remote" {}
+  backend "s3" {}
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version ="~> 4.0.0"
+      version = "~> 4.0.0"
     }
   }
 }
@@ -11,10 +11,8 @@ terraform {
 
 provider "aws" {
   region = var.aws_region
-  assume_role {
-    role_arn = "arn:aws:iam::${var.target_aws_account_id}:role/BCGOV_${var.target_env}_Automation_Admin_Role"
-  }
 }
+
 data "aws_caller_identity" "current" {}
 resource "aws_s3_bucket" "buckets" {
   #checkov:skip=CKV_AWS_18:Access logging is not required for sample application
@@ -23,13 +21,13 @@ resource "aws_s3_bucket" "buckets" {
   #checkov:skip=CKV_AWS_144:Bucket replication is not required for sample application
   #checkov:skip=CKV_AWS_145:Bucket encryption is automatically done by ASEA
   for_each = toset(["upload-bucket", "lambda-bucket"])
-  bucket = "${each.key}-${data.aws_caller_identity.current.account_id}-${var.aws_region}"
+  bucket   = "${each.key}-${data.aws_caller_identity.current.account_id}-${var.aws_region}"
 }
 resource "aws_s3_bucket_versioning" "buckets" {
-  for_each = toset(["upload-bucket", "lambda-bucket"]) 
-  bucket = aws_s3_bucket.buckets[each.key].id
+  for_each = toset(["upload-bucket", "lambda-bucket"])
+  bucket   = aws_s3_bucket.buckets[each.key].id
   versioning_configuration {
-      status = "Enabled"
+    status = "Enabled"
   }
 }
 
@@ -40,7 +38,7 @@ data "archive_file" "lambda_greetings_server" {
 }
 
 resource "aws_s3_bucket_object" "lambda_greetings_server" {
-  bucket = aws_s3_bucket.buckets["lambda-bucket"].id   #argument deprecated
+  bucket = aws_s3_bucket.buckets["lambda-bucket"].id #argument deprecated
   key    = "greetings-server.zip"
   source = data.archive_file.lambda_greetings_server.output_path
   etag   = filemd5(data.archive_file.lambda_greetings_server.output_path)
@@ -58,7 +56,7 @@ resource "aws_dynamodb_table" "ssp-greetings" {
   hash_key  = "pid"
   range_key = "id"
   #checkov:skip=CKV_AWS_119:Encryption is managed by dynamodb
-  billing_mode   = "PAY_PER_REQUEST"
+  billing_mode = "PAY_PER_REQUEST"
   # read_capacity  = 5
   # write_capacity = 5
   attribute {
@@ -70,7 +68,7 @@ resource "aws_dynamodb_table" "ssp-greetings" {
     type = "S"
   }
   point_in_time_recovery {
-   enabled = true
+    enabled = true
   }
 }
 
@@ -157,8 +155,8 @@ resource "aws_lambda_function" "greetings_server_lambda" {
   s3_bucket = aws_s3_bucket.buckets["lambda-bucket"].id
   s3_key    = aws_s3_bucket_object.lambda_greetings_server.key
 
-  runtime = "nodejs14.x"
-  handler = "./lambda.handler"
+  runtime                        = "nodejs14.x"
+  handler                        = "./lambda.handler"
   reserved_concurrent_executions = -1
 
   source_code_hash = data.archive_file.lambda_greetings_server.output_base64sha256
@@ -176,7 +174,7 @@ resource "aws_lambda_function" "greetings_server_lambda" {
 
 resource "aws_api_gateway_rest_api" "apiLambda" {
   name = "myAPI"
-    lifecycle {
+  lifecycle {
     create_before_destroy = true
   }
 
@@ -195,7 +193,7 @@ resource "aws_api_gateway_method" "proxyMethod" {
   resource_id   = aws_api_gateway_resource.proxy.id
   http_method   = "ANY"
   authorization = "NONE"
- #checkov:skip=CKV_AWS_59:API_KEY authotization is not required for this sample application 
+  #checkov:skip=CKV_AWS_59:API_KEY authotization is not required for this sample application 
 }
 
 resource "aws_api_gateway_integration" "lambda" {
@@ -238,7 +236,7 @@ resource "aws_api_gateway_deployment" "apideploy" {
 
   rest_api_id = aws_api_gateway_rest_api.apiLambda.id
   stage_name  = "test"
-    lifecycle {
+  lifecycle {
     create_before_destroy = true
   }
 

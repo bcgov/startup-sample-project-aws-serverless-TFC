@@ -1,5 +1,5 @@
 terraform {
- backend "remote" {}
+ backend "s3" {}
 required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -11,10 +11,8 @@ required_providers {
 
 provider "aws" {
   region = var.aws_region
-  assume_role {
-    role_arn = "arn:aws:iam::${var.target_aws_account_id}:role/BCGOV_${var.target_env}_Automation_Admin_Role"
-  }
 }
+
 data "aws_caller_identity" "current" {}
 resource "aws_s3_bucket" "web_distribution" {
   bucket = "sample-app-${data.aws_caller_identity.current.account_id}-${var.aws_region}"
