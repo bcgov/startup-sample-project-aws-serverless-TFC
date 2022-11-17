@@ -34,9 +34,8 @@ jobs:
           workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-backend" }
           EOF
 
-
-          terraform init -backend-config=backend.hcl
-          terraform destroy -auto-approve
+          terraform init -backend-config=backend.hcl -input=false
+          terraform destroy -auto-approve -input=false
 
       - name: destroying front-end
         run: |
@@ -46,5 +45,5 @@ jobs:
           workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-frontend" }
           EOF
 
-          terraform init -backend-config=backend.hcl
-          terraform destroy -auto-approve
+          terraform init -backend-config=backend.hcl -input=false
+          terraform destroy -auto-approve -input=false
