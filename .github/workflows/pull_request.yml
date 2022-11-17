@@ -43,8 +43,9 @@ jobs:
           organization = "${{ env.organization }}"
           workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-backend" }
           EOF
-          terraform init -backend-config=backend.hcl
-          terraform plan
+          terraform init -backend-config=backend.hcl -input=false
+          terraform plan -input=false
+
       - name: Building front-end and deploying Frontend using terraform
         run: |
           cd server
@@ -56,5 +57,5 @@ jobs:
           organization = "${{ env.organization }}"
           workspaces { name = "${{ secrets.LICENCEPLATE }}-${{ env.environment }}-frontend" }
           EOF
-          terraform init -backend-config=backend.hcl
-          terraform plan
+          terraform init -backend-config=backend.hcl -input=false
+          terraform plan -input=false
