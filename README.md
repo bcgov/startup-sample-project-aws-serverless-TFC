@@ -30,6 +30,6 @@ For how to use the test associated to this project, please check the README file
 
 ## Testing Thanks
 
-Thanks to BrowserStack for Testing Tool support via OpenSource Licensing ![BrowserStack](docs/images/browserstack-logo-white-small.png)
+Thanks to BrowserStack for Testing Tool support via OpenSource Licensing ![BrowserStack](docs/images/browserstack-logo-white-small.png).
 
 
