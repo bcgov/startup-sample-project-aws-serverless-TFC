@@ -53,3 +53,4 @@ jobs:
           EOF
           terraform init -backend-config=backend.hcl -input=false
           terraform plan -input=false
+          
