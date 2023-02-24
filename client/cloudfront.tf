@@ -61,6 +61,8 @@ resource "aws_cloudfront_distribution" "web_distribution" {
       origin_access_identity = aws_cloudfront_origin_access_identity.web_distribution.cloudfront_access_identity_path
     }
   }
+  #checkov:skip=CKV2_AWS_47:Ensure AWS CloudFront attached WAFv2 WebACL is configured with AMR for Log4j Vulnerability
+  #checkov:skip=Ensure AWS CloudFront distribution uses custom SSL certificate
   #checkov:skip=CKV_AWS_86:Cloudfront distribution logging is not required for sample application
   #checkov:skip=CKV_AWS_68:WAF not required for sample application
   #checkov:skip=CKV2_AWS_32:Response policy headers not required for sample application

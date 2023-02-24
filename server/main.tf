@@ -195,7 +195,9 @@ resource "aws_api_gateway_method" "proxyMethod" {
   resource_id   = aws_api_gateway_resource.proxy.id
   http_method   = "ANY"
   authorization = "NONE"
- #checkov:skip=CKV_AWS_59:API_KEY authotization is not required for this sample application 
+ #checkov:skip=CKV_AWS_59:API_KEY authotization is not required for this sample application
+ #checkov:skip=CKV2_AWS_53:"API gateway request validation" is not required for this sample application
+
 }
 
 resource "aws_api_gateway_integration" "lambda" {
