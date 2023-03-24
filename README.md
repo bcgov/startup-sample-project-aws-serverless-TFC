@@ -1,13 +1,13 @@
 # Serverless Architecture
 
-![Serverless Architecture](./images/serverless-architecture.png).
+![Serverless Architecture](./resources/serverless-architecture.png).
 
 # startup-sample-project-aws-serverless-OIDC
 Lambda serverless app meant to accelerate teams onboarding to the BC Gov SEA AWS space.
 This repository use [Github OpenID Connect](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services) to authenticate directly to AWS assuming an IAM role.
 
 ## Authentication architecture
-![](images/GitHub-OIDC_arch.png)
+![](resources/GitHub-OIDC_arch.png)
 
 ## Setup
 - Fork this repo
@@ -18,6 +18,7 @@ you'll need to add two github secrets:
   - `S3_BACKEND_NAME` is the name of the S3 Bucket name used to store the Terraform state.
   - `TERRAFORM_DEPLOY_ROLE_ARN` This is the ARN of IAM Role used to deploy resources through the Github action authenticate with the GitHub OpenID Connect. You also need to link that role to the correct IAM Policy.
   - - To access the `TERRAFORM_DEPLOY_ROLE_ARN` you need to create it beforehand manually. To create it you need can use this example of thrust relationship :
+  - - The [minimal access policy can be found here](resources/deployement-policy.json)
   ```
   {
     "Version": "2012-10-17",
@@ -59,6 +60,6 @@ For how to use the test associated to this project, please check the README file
 
 ## Testing Thanks
 
-Thanks to BrowserStack for Testing Tool support via OpenSource Licensing ![BrowserStack](docs/images/browserstack-logo-white-small.png)
+Thanks to BrowserStack for Testing Tool support via OpenSource Licensing ![BrowserStack](docs/resources/browserstack-logo-white-small.png)
 
 
