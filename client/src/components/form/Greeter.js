@@ -41,7 +41,7 @@ console.log(values)
             options={[
               { value: 'Aloha', label: 'Aloha' },
               { value: 'Bonjour', label: 'Bonjour' },
-              { value: 'Greetings and salutations', label: 'Greetings and salutations' },
+              { value: 'Test entry', label: 'Deploy Serverless - o20ya1 - Upgrade to 1.5.6a' },
               { value: 'Hello', label: 'Hello' },
               { value: 'Howdy', label: 'Howdy' },
               { value: 'Konichiwa', label: 'Konichiwa' },
