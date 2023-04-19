@@ -41,7 +41,7 @@ console.log(values)
             options={[
               { value: 'Aloha', label: 'Aloha' },
               { value: 'Bonjour', label: 'Bonjour' },
-              { value: 'Greetings and salutations', label: 'Greetings and salutations' },
+              { value: 'Greetings and salutations', label: 'o20ya1 - after changing secrets to vars - April 19, 2023' },
               { value: 'Hello', label: 'Hello' },
               { value: 'Howdy', label: 'Howdy' },
               { value: 'Konichiwa', label: 'Konichiwa' },
