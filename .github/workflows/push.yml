@@ -33,7 +33,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ variables.TERRAFORM_DEPLOY_ROLE_ARN }}
+          role-to-assume: ${{ vars.TERRAFORM_DEPLOY_ROLE_ARN }}
           aws-region: ca-central-1
 
       - name: building the backend
@@ -45,9 +45,9 @@ jobs:
         run: |
           cd server
           cat <<EOF > backend.hcl
-          bucket = "${{ variables.S3_BACKEND_NAME }}"
-          key = "${{ variables.LICENSEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
-          dynamodb_table = "terraform-remote-state-lock-${{ variables.LICENSEPLATE }}"
+          bucket = "${{ vars.S3_BACKEND_NAME }}"
+          key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
+          dynamodb_table = "terraform-remote-state-lock-${{ vars.LICENSEPLATE }}"
           EOF
           terraform init -backend-config=backend.hcl
           terraform apply -auto-approve
@@ -60,9 +60,9 @@ jobs:
           npm install
           CI=false npm run build
           cat <<EOF > backend.hcl
-          bucket = "${{ variables.S3_BACKEND_NAME }}"
-          key = "${{ variables.LICENSEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
-          dynamodb_table = "terraform-remote-state-lock-${{ variables.LICENSEPLATE }}"
+          bucket = "${{ vars.S3_BACKEND_NAME }}"
+          key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
+          dynamodb_table = "terraform-remote-state-lock-${{ vars.LICENSEPLATE }}"
           EOF
           terraform init -backend-config=backend.hcl
           terraform apply -auto-approve

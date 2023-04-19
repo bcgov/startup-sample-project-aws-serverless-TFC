@@ -4,8 +4,8 @@
 name: Run Automated test Ubuntu
 
 env:
-      LICENSE_PLATE: ${{ variables.LICENSEPLATE }} 
-      BASEURL:   ${{ variables.BASEURL }} 
+      LICENSE_PLATE: ${{ vars.LICENSEPLATE }} 
+      BASEURL:   ${{ vars.BASEURL }} 
       
 on:
     workflow_dispatch:
