@@ -5,23 +5,18 @@ Under `functional_test` folder you will find a set of scripts to run an automate
 The app is written in groovy using the geb/spock framework. This framework makes the test easy to read and to follow.
 
 ## Run the test
-As currently written, the BASEURL is read from the environment, so, when running locally.  first set this value by typing on the command line 
-`export BASEURL="https://d3qkdfho08icid.cloudfront.net/"`
+As currently written, the BASEURL is read from the environment, so, when running the script locally, first set this value by typing on the command line 
+`export BASEURL="https://a1bdcedg23h1jkl.cloudfront.net/"`
 
-The find the specific address you need to log into Cloudfront after installing the application. 
+The find the url for the serverless app, once the app has been deployed, log in AWS console, using the AWS account credentials and open the Cloudfront console. 
 
-To run the test, open terminal and navigate to `.../functional-test` and execute 
+To run the test, open terminal and navigate to `../functional-test` and execute 
 `./gradlew chromeTest --tests="FirstTest"`
 
 Alternatively, you can hardcode the address in the GebConfig.groovy file
 
-To run the test, cd to `functional-tests` folder type on terminal
 
-  `./gradlew chromeTest --tests="FirstTest"`
-
-
-
-When running the test in GitHub actions, set the BASEURL as a GitHub secret
+When running the test in GitHub actions, set the BASEURL as a GitHub variable
 
 
 ## Reports
@@ -45,11 +40,11 @@ and with some manipulation find the BASEURL. Unfortunately, this does not work w
 When using BrowserStack, the test scripts are running locally in your machine (or in GitHub) firing a remote browser in BrowserStack, in this case on the BrowserStack cloud, and the browser is opening the containers app page stored in AWS
 
 For this configuration you need 
-- The sample serverless app installed in AWS. You also need the license plate (check `startup-sample-project-aws-serverless/Readme.md` for more information)
+- The sample serverless app installed in AWS. You also need the license plate,  (check `startup-sample-project-aws-serverless/Readme.md` for more information)
 
 - An account with BrowserStack, once you have the account, you will access the values of `User Name` and `Access Key`. To run the test locally, you will need to type in terminal the following commands to add their values in your environment
 
-  `export LICENSE_PLATE=[LICENSE PLATE]`
+  `export LICENSE_PLATE=[LICENSEPLATE]`
   
   `export BROWSERSTACK_USERNAME=[BrowserStack user name]`
   
@@ -69,12 +64,12 @@ Currently it is not possible to run the test automatically in a CI/CD GiHub Acti
 
 Currently, the manually triggered action `AutomationTestUbuntu.yml` runs automatically the tests in GitHub and `browserStackTest.yml` to run the test using BrowserStack
 
-The following secrets need to be set to run the test:
+The following GitHub secrets need to be set to run the test:
 
 - `BROWSERSTACK_ACCESS_KEY`
 - `BROWSERSTACK_USERNAME`
 
-The following secrets need to be set to mail the test results to the account of your choice (You may comment out the section that sends the eamil in the yml script)
+The following GitHub secrets need to be set to mail the test results to the account of your choice (You may comment out the section that sends the eamil in the yml script)
 - `MAIL_ADDRESS`
 - `MAIL_PASSWORD`
 - `MAIL_SERVER`

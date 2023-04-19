@@ -1,9 +1,6 @@
 
 name: BrowserStack Test
 
-env:  
-     LICENSE_PLATE: ${{ secrets.MY_LICENSE_PLATE }}
-
 
 on: 
   workflow_dispatch:

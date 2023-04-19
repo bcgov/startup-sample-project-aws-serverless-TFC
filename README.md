@@ -20,7 +20,7 @@ The GitHub actions require the following github variables:
 
     - To access the `TERRAFORM_DEPLOY_ROLE_ARN` you need to create it beforehand manually. To create it you need can use this example of thrust relationship :
     - The [minimal access policy can be found here](resources/deployement-policy.json) (Note: in the policy examples `<account-id>` has to be replaced by the AWS account id of the account where you are deploying the sample app)
-    - The role rewuires to have the following trust relationship set up  (Note: as before `<account-id>` has to be replaced by the AWS account id of the account where you are deploying the sample app)
+    - The role requires to have the following trust relationship set up  (Note: as before `<account-id>` has to be replaced by the AWS account id of the account where you are deploying the sample app)
   ```
   {
     "Version": "2012-10-17",
