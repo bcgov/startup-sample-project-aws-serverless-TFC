@@ -27,16 +27,16 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ secrets.TERRAFORM_DEPLOY_ROLE_ARN }}
+          role-to-assume: ${{ vars.TERRAFORM_DEPLOY_ROLE_ARN }}
           aws-region: ca-central-1
 
       - name: destroying the  back-end using terraform
         run: |
           cd server
           cat <<EOF > backend.hcl
-          bucket = "${{ secrets.S3_BACKEND_NAME }}"
-          key = "${{ secrets.LICENCEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
-          dynamodb_table = "terraform-remote-state-lock-${{ secrets.LICENCEPLATE }}"
+          bucket = "${{ vars.S3_BACKEND_NAME }}"
+          key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
+          dynamodb_table = "terraform-remote-state-lock-${{ vars.LICENSEPLATE }}"
           EOF
           terraform init -backend-config=backend.hcl
           terraform destroy -auto-approve
@@ -45,9 +45,9 @@ jobs:
         run: |
           cd client
           cat <<EOF > backend.hcl
-          bucket = "${{ secrets.S3_BACKEND_NAME }}"
-          key = "${{ secrets.LICENCEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
-          dynamodb_table = "terraform-remote-state-lock-${{ secrets.LICENCEPLATE }}"
+          bucket = "${{ vars.S3_BACKEND_NAME }}"
+          key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
+          dynamodb_table = "terraform-remote-state-lock-${{ vars.LICENSEPLATE }}"
           EOF
           terraform init -backend-config=backend.hcl
           terraform destroy -auto-approve

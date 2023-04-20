@@ -12,13 +12,15 @@ This repository use [Github OpenID Connect](https://docs.github.com/en/actions/d
 ## Setup
 - Fork this repo
 - Enable github actions
-#### Github Secrets
-you'll need to add two github secrets:
-  - `LICENCEPLATE` is the 6 character licensecho "x"e plate associated with your project set e.g. `abc123`
+#### Github Variables
+The GitHub actions require the following github variables:
+  - `LICENSEPLATE` is the 6 character alphanumeric string  associated with your project set e.g. `abc123` (Note: due to AWS constrains it is required the first characters is a letter)
   - `S3_BACKEND_NAME` is the name of the S3 Bucket name used to store the Terraform state.
   - `TERRAFORM_DEPLOY_ROLE_ARN` This is the ARN of IAM Role used to deploy resources through the Github action authenticate with the GitHub OpenID Connect. You also need to link that role to the correct IAM Policy.
-  - - To access the `TERRAFORM_DEPLOY_ROLE_ARN` you need to create it beforehand manually. To create it you need can use this example of thrust relationship :
-  - - The [minimal access policy can be found here](resources/deployement-policy.json)
+
+    - To access the `TERRAFORM_DEPLOY_ROLE_ARN` you need to create it beforehand manually. To create it you need can use this example of thrust relationship :
+    - The [minimal access policy can be found here](resources/deployement-policy.json) (Note: in the policy examples `<account-id>` has to be replaced by the AWS account id of the account where you are deploying the sample app)
+    - The role requires to have the following trust relationship set up  (Note: as before `<account-id>` has to be replaced by the AWS account id of the account where you are deploying the sample app)
   ```
   {
     "Version": "2012-10-17",
@@ -43,13 +45,13 @@ you'll need to add two github secrets:
 }
   ```
 
-  - Once the app has been built, you should be able to log into AWS with your IDIR account (2FA). Once in AWS search for Cloudfront and then click on Distributions (If you can not see it click the hamburger on the top left corner). The Distributions dashboard shows the Domain name, you can use that domain name to interact with you app.
+  - Once the app has been built, you should be able to log into AWS with your IDIR account (2FA may be implemented). Once logged in AWS search for Cloudfront and then click on Distributions (If you can not see it click the hamburger on the top left corner). The Distributions dashboard shows the Domain name url, you can use that url to open a browser session and load the app.
 
 
 #### Pipeline
 The github actions will trigger on a pull request creation and merge.
-- Creating a pull request will run a `terraform plan` and outline everything that will be deployed into your AWS accounts, but will not create anything.
-- Merging into `main` will run a `terraform apply` and your AWS assets will be deployed into your `dev` and `sandbox` accounts.
+- Creating a pull request will run a `terraform plan` and outline everything that will be deployed into your AWS accounts, but will not create anything. Please review the plan to verify that all is correct.
+- Merging into `main` will run a `terraform apply` and your AWS assets will be deployed in the `dev` accounts.
 
 NOTE: make sure you are creating pull requests/ merging within your fork
 
