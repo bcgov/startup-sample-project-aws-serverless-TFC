@@ -50,8 +50,8 @@ jobs:
           key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app-backend.tfstate"
           dynamodb_table =  "${{ vars.DYNAMO_DB_TABLE_NAME }}"
           EOF
-          terraform init -backend-config=backend.hcl
-          terraform apply -auto-approve
+          terraform init -backend-config=backend.hcl -input=false
+          terraform apply -auto-approve -input=false
           
       - name: Building front-end and deploying Frontend using terraform
         run: |
@@ -66,5 +66,5 @@ jobs:
           key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app-frontend.tfstate"
           dynamodb_table = "${{ vars.DYNAMO_DB_TABLE_NAME }}"
           EOF
-          terraform init -backend-config=backend.hcl
-          terraform apply -auto-approve
+          terraform init -backend-config=backend.hcl -input=false
+          terraform apply -auto-approve -input=false

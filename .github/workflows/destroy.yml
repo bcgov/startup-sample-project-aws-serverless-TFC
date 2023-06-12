@@ -38,8 +38,10 @@ jobs:
           key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app-backend.tfstate"
           dynamodb_table = "${{ vars.DYNAMO_DB_TABLE_NAME }}"
           EOF
+
           terraform init -backend-config=backend.hcl
           terraform destroy -auto-approve
+
 
       - name: destroying front-end
         run: |
@@ -49,5 +51,7 @@ jobs:
           key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app-frontend.tfstate"
           dynamodb_table = "${{ vars.DYNAMO_DB_TABLE_NAME }}"
           EOF
+
           terraform init -backend-config=backend.hcl
           terraform destroy -auto-approve
+
