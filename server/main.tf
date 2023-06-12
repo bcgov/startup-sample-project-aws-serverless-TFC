@@ -20,6 +20,8 @@ resource "aws_s3_bucket" "buckets" {
   #checkov:skip=CKV_AWS_19:Obejct encryption is automatically done by ASEA
   #checkov:skip=CKV_AWS_144:Bucket replication is not required for sample application
   #checkov:skip=CKV_AWS_145:Bucket encryption is automatically done by ASEA
+  #checkov:skip=CKV2_AWS_62:Event Notifications not required for sample application
+  #checkov:skip=CKV2_AWS_61:Life cycle configuration not required for sample application
   for_each = toset(["upload-bucket", "lambda-bucket"])
   bucket   = "${each.key}-${data.aws_caller_identity.current.account_id}-${var.aws_region}"
 }
@@ -186,6 +188,7 @@ resource "aws_api_gateway_resource" "proxy" {
   rest_api_id = aws_api_gateway_rest_api.apiLambda.id
   parent_id   = aws_api_gateway_rest_api.apiLambda.root_resource_id
   path_part   = "{proxy+}"
+#checkov:skip=CKV2_AWS_53:Api request authorization not required for sample application
 }
 
 resource "aws_api_gateway_method" "proxyMethod" {
@@ -194,6 +197,7 @@ resource "aws_api_gateway_method" "proxyMethod" {
   http_method   = "ANY"
   authorization = "NONE"
   #checkov:skip=CKV_AWS_59:API_KEY authotization is not required for this sample application 
+  #checkov:skip=CKV2_AWS_53:API request validation is not required for this sample application
 }
 
 resource "aws_api_gateway_integration" "lambda" {
@@ -215,6 +219,7 @@ resource "aws_api_gateway_method" "proxy_root" {
   http_method   = "ANY"
   authorization = "NONE"
   #checkov:skip=CKV_AWS_59:API_KEY authotization is not required for this sample application
+  #checkov:skip=CKV2_AWS_53:API request validation is not required for this sample application
 }
 
 resource "aws_api_gateway_integration" "lambda_root" {

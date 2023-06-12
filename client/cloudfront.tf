@@ -21,6 +21,8 @@ resource "aws_s3_bucket" "web_distribution" {
   #checkov:skip=CKV2_AWS_6:Block Public Access is automatically done by ASEA
   #checkov:skip=CKV_AWS_19:Serverside Encryption is automatically done by ASEA
   #checkov:skip=CKV_AWS_144:Bucket replication is not required for sample application
+  #checkov:skip=CKV2_AWS_62:Event Notifications not required for sample application
+  #checkov:skip=CKV2_AWS_61:Life cycle configuration not required for sample application
 }
 resource "aws_s3_bucket_versioning" "web_distribution" {
   bucket = aws_s3_bucket.web_distribution.id
@@ -59,9 +61,13 @@ resource "aws_cloudfront_distribution" "web_distribution" {
       origin_access_identity = aws_cloudfront_origin_access_identity.web_distribution.cloudfront_access_identity_path
     }
   }
+  #checkov:skip=CKV2_AWS_47:WAFv2 WebACL configuration is not required for sample application
   #checkov:skip=CKV_AWS_86:Cloudfront distribution logging is not required for sample application
   #checkov:skip=CKV_AWS_68:WAF not required for sample application
-  #checkov:skip=CKV2_AWS_32:Response policy headers not required for sample application
+  #checkov:skip=CKV2_AWS_32:Response policy headers not required for sample application\
+  #checkov:skip=CKV_AWS_310:Origin Failover not required for sample application
+  #checkov:skip=CKV2_AWS_42:custom ssl cert not required for sample application
+  
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]

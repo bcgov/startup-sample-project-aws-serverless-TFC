@@ -5,17 +5,10 @@
             "Sid": "General",
             "Effect": "Allow",
             "Action": [
-                "application-autoscaling:*",
-                "ecs:CreateCluster",
                 "cloudwatch:DescribeAlarmsForMetric",
                 "sns:Unsubscribe",
                 "sns:GetSubscriptionAttributes",
-                "cloudwatch:ListMetrics",
-                "ecs:DescribeTaskDefinition",
-                "ecs:DeregisterTaskDefinition",
-                "ecs:RegisterTaskDefinition",
-                "elasticloadbalancing:Describe*",
-                "ec2:Describe*"
+                "cloudwatch:ListMetrics"
             ],
             "Resource": "*"
         },
@@ -25,45 +18,11 @@
             "Action": [
                 "s3:*"
             ],
-            "Resource": [
-                "arn:aws:s3:::terraform-remote-state-*",
-                "arn:aws:s3:::terraform-remote-state-*/*",
-                "arn:aws:s3:::sample-app-*",
-                "arn:aws:s3:::sample-app-*/*",
-                "arn:aws:s3:::upload-bucket-*",
-                "arn:aws:s3:::upload-bucket-*/*",
-                "arn:aws:s3:::lambda-bucket-*",
-                "arn:aws:s3:::lambda-bucket-*/*"
-            ]
-        },
-        {
-            "Sid": "ELB",
-            "Effect": "Allow",
-            "Action": [
-                "elasticloadbalancing:CreateLoadBalancer",
-                "elasticloadbalancing:DeleteLoadBalancer",
-                "elasticloadbalancing:RemoveTags",
-                "elasticloadbalancing:AddTags",
-                "elasticloadbalancing:ModifyLoadBalancerAttributes",
-                "elasticloadbalancing:RegisterTargets",
-                "elasticloadbalancing:CreateTargetGroup",
-                "elasticloadbalancing:DeregisterTargets",
-                "elasticloadbalancing:DeleteTargetGroup",
-                "elasticloadbalancing:CreateListener",
-                "elasticloadbalancing:ModifyRule",
-                "elasticloadbalancing:CreateRule",
-                "elasticloadbalancing:SetSecurityGroups",
-                "elasticloadbalancing:ModifyTargetGroupAttributes",
-                "elasticloadbalancing:DeleteRule",
-                "elasticloadbalancing:ModifyTargetGroup",
-                "elasticloadbalancing:DeleteListener",
-                "elasticloadbalancing:DeleteTargetGroup",
-                "elasticloadbalancing:CreateRule"
-            ],
-            "Resource": [
-                "arn:aws:elasticloadbalancing:ca-central-1:<account-id>:listener-rule/app/default/*/*/*",
-                "arn:aws:elasticloadbalancing:ca-central-1:<account-id>:targetgroup/sample-target-group/*",
-                "arn:aws:elasticloadbalancing:ca-central-1:<account-id>:listener/app/default/*"
+            "Resource": [                
+                "arn:aws:s3:::tnfhhm-dev-serverless-sample-app/*",
+                "arn:aws:s3:::upload-bucket*",
+                "arn:aws:s3:::lambda-bucket*",
+                "arn:aws:s3:::sample-app*"
             ]
         },
         {
@@ -88,13 +47,13 @@
                 "iam:PassRole"
             ],
             "Resource": [
-                "arn:aws:iam::<account-id>:policy/ecs_task_execution_cwlogs",
-                "arn:aws:iam::<account-id>:policy/sample_app_container_cwlogs",
-                "arn:aws:iam::<account-id>:policy/upload_bucket_policy",
-                "arn:aws:iam::<account-id>:policy/sample_app_dynamodb",
-                "arn:aws:iam::<account-id>:role/startupSampleEcsTaskExecutionRole",
-                "arn:aws:iam::<account-id>:role/sample_app_container_role",
-                "arn:aws:iam::<account-id>:role/serverless_lambda*"
+                "arn:aws:iam::<aws-account-id>:policy/ecs_task_execution_cwlogs",
+                "arn:aws:iam::<aws-account-id>:policy/sample_app_container_cwlogs",
+                "arn:aws:iam::<aws-account-id>:policy/upload_bucket_policy",
+                "arn:aws:iam::<aws-account-id>:policy/sample_app_dynamodb",
+                "arn:aws:iam::<aws-account-id>:role/startupSampleEcsTaskExecutionRole",
+                "arn:aws:iam::<aws-account-id>:role/sample_app_container_role",
+                "arn:aws:iam::<aws-account-id>:role/serverless_lambda*"
             ]
         },
         {
@@ -106,8 +65,8 @@
                 "budgets:ModifyBudget"
             ],
             "Resource": [
-                "arn:aws:budgets::<account-id>:budget/startup-sample-monthly/action/*",
-                "arn:aws:budgets::<account-id>:budget/startup-sample-monthly"
+                "arn:aws:budgets::<aws-account-id>:budget/startup-sample-monthly/action/*",
+                "arn:aws:budgets::<aws-account-id>:budget/startup-sample-monthly"
             ]
         },
         {
@@ -124,8 +83,8 @@
                 "cloudwatch:ListTagsForResource"
             ],
             "Resource": [
-                "arn:aws:cloudwatch:ca-central-1:<account-id>:alarm:sample_cpu_utilization_*",
-                "arn:aws:cloudwatch:ca-central-1:<account-id>:insight-rule/*"
+                "arn:aws:cloudwatch:ca-central-1:<aws-account-id>:alarm:sample_cpu_utilization_*",
+                "arn:aws:cloudwatch:ca-central-1:<aws-account-id>:insight-rule/*"
             ]
         },
         {
@@ -135,7 +94,7 @@
                 "dynamodb:*"
             ],
             "Resource": [
-                "arn:aws:dynamodb:ca-central-1:<account-id>:*"
+                "arn:aws:dynamodb:ca-central-1:<aws-account-id>:*"
             ]
         },
         {
@@ -157,7 +116,7 @@
                 "cloudfront:DeleteCloudFrontOriginAccessIdentity"
             ],
             "Resource": [
-                "arn:aws:cloudfront::<account-id>:*"
+                "arn:aws:cloudfront::<aws-account-id>:*"
             ]
         },
         {
@@ -172,52 +131,7 @@
                 "SNS:SetTopicAttributes"
             ],
             "Resource": [
-                "arn:aws:sns:ca-central-1:<account-id>:startup-sample-billing-alert-topic"
-            ]
-        },
-        {
-            "Sid": "ecs",
-            "Effect": "Allow",
-            "Action": [
-                "ecs:TagResource",
-                "ecs:DeleteService",
-                "ecs:DeleteCluster",
-                "ecs:DescribeClusters",
-                "ecs:CreateService",
-                "ecs:DescribeServices",
-                "ecs:DescribeTasks",
-                "ecs:UntagResource",
-                "ecs:UpdateService"
-            ],
-            "Resource": [
-                "arn:aws:ecs:ca-central-1:<account-id>:task-set/sample-cluster/sample-service/*",
-                "arn:aws:ecs:ca-central-1:<account-id>:cluster/sample-cluster",
-                "arn:aws:ecs:ca-central-1:<account-id>:task/sample-cluster/*",
-                "arn:aws:ecs:ca-central-1:<account-id>:container-instance/sample-cluster/*",
-                "arn:aws:ecs:ca-central-1:<account-id>:task-definition/sample-app-task:*",
-                "arn:aws:ecs:ca-central-1:<account-id>:service/sample-cluster/sample-service",
-                "arn:aws:ecs:ca-central-1:<account-id>:capacity-provider/FARGATE_SPOT"
-            ]
-        },
-        {
-            "Sid": "ec2",
-            "Effect": "Allow",
-            "Action": [
-                "ec2:DeleteSecurityGroup",
-                "ec2:CreateSecurityGroup",
-                "ec2:ModifySecurityGroupRules",
-                "ec2:RevokeSecurityGroupEgress",
-                "ec2:RevokeSecurityGroupIngress",
-                "ec2:AuthorizeSecurityGroupEgress",
-                "ec2:AuthorizeSecurityGroupIngress",
-                "ec2:UpdateSecurityGroupRuleDescriptionsEgress",
-                "ec2:UpdateSecurityGroupRuleDescriptionsIngress",
-                "ec2:CreateTags",
-                "ec2:DeleteTags"
-            ],
-            "Resource": [
-                "arn:aws:ec2:ca-central-1:<account-id>:security-group/*",
-                "arn:aws:ec2:ca-central-1:<account-id>:vpc/*"
+                "arn:aws:sns:ca-central-1:<aws-account-id>:startup-sample-billing-alert-topic"
             ]
         },
         {
@@ -226,7 +140,7 @@
             "Action": [
                 "lambda:*"
             ],
-            "Resource": "*"
+            "Resource": "arn:aws:lambda:ca-central-1:<aws-account-id>:function:greetings_server_fn"
         },
         {
             "Sid": "APIgateway",
