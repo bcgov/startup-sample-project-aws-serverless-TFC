@@ -61,9 +61,7 @@ resource "aws_cloudfront_distribution" "web_distribution" {
       origin_access_identity = aws_cloudfront_origin_access_identity.web_distribution.cloudfront_access_identity_path
     }
   }
-
   #checkov:skip=CKV2_AWS_47:WAFv2 WebACL configuration is not required for sample application
-  #checkov:skip=CKV2_AWS_42:Ensure AWS CloudFront distribution uses custom SSL certificate
   #checkov:skip=CKV_AWS_86:Cloudfront distribution logging is not required for sample application
   #checkov:skip=CKV_AWS_68:WAF not required for sample application
   #checkov:skip=CKV2_AWS_32:Response policy headers not required for sample application\
@@ -117,7 +115,7 @@ locals {
   }
 }
 
-resource "aws_s3_bucket_object" "site_files" {
+resource "aws_s3_object" "site_files" {
   # Enumerate all the files in ./src
   for_each = fileset(local.src_dir, "**")
 
