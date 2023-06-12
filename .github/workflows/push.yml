@@ -24,14 +24,14 @@ jobs:
 
     steps:
       - name: checkout the repo and building the Backend
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
         with:
           node-version: 16
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ vars.TERRAFORM_DEPLOY_ROLE_ARN }}
           aws-region: ca-central-1
@@ -46,11 +46,12 @@ jobs:
           cd server
           cat <<EOF > backend.hcl
           bucket = "${{ vars.S3_BACKEND_NAME }}"
-          key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
-          dynamodb_table = "terraform-remote-state-lock-${{ vars.LICENSEPLATE }}"
+          region = "ca-central-1"
+          key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app-backend.tfstate"
+          dynamodb_table =  "${{ vars.DYNAMO_DB_TABLE_NAME }}"
           EOF
-          terraform init -backend-config=backend.hcl
-          terraform apply -auto-approve
+          terraform init -backend-config=backend.hcl -input=false
+          terraform apply -auto-approve -input=false
           
       - name: Building front-end and deploying Frontend using terraform
         run: |
@@ -61,8 +62,9 @@ jobs:
           CI=false npm run build
           cat <<EOF > backend.hcl
           bucket = "${{ vars.S3_BACKEND_NAME }}"
-          key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
-          dynamodb_table = "terraform-remote-state-lock-${{ vars.LICENSEPLATE }}"
+          region = "ca-central-1"
+          key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app-frontend.tfstate"
+          dynamodb_table = "${{ vars.DYNAMO_DB_TABLE_NAME }}"
           EOF
-          terraform init -backend-config=backend.hcl
-          terraform apply -auto-approve
+          terraform init -backend-config=backend.hcl -input=false
+          terraform apply -auto-approve -input=false

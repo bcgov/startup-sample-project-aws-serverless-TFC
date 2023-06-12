@@ -22,10 +22,10 @@ jobs:
 
     steps:
       - name: checkout the repo and building the Backend
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ vars.TERRAFORM_DEPLOY_ROLE_ARN }}
           aws-region: ca-central-1
@@ -35,19 +35,23 @@ jobs:
           cd server
           cat <<EOF > backend.hcl
           bucket = "${{ vars.S3_BACKEND_NAME }}"
-          key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
-          dynamodb_table = "terraform-remote-state-lock-${{ vars.LICENSEPLATE }}"
+          key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app-backend.tfstate"
+          dynamodb_table = "${{ vars.DYNAMO_DB_TABLE_NAME }}"
           EOF
+
           terraform init -backend-config=backend.hcl
           terraform destroy -auto-approve
+
 
       - name: destroying front-end
         run: |
           cd client
           cat <<EOF > backend.hcl
           bucket = "${{ vars.S3_BACKEND_NAME }}"
-          key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
-          dynamodb_table = "terraform-remote-state-lock-${{ vars.LICENSEPLATE }}"
+          key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app-frontend.tfstate"
+          dynamodb_table = "${{ vars.DYNAMO_DB_TABLE_NAME }}"
           EOF
+
           terraform init -backend-config=backend.hcl
           terraform destroy -auto-approve
+

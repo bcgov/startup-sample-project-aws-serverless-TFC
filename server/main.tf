@@ -20,6 +20,8 @@ resource "aws_s3_bucket" "buckets" {
   #checkov:skip=CKV_AWS_19:Obejct encryption is automatically done by ASEA
   #checkov:skip=CKV_AWS_144:Bucket replication is not required for sample application
   #checkov:skip=CKV_AWS_145:Bucket encryption is automatically done by ASEA
+  #checkov:skip=CKV2_AWS_62:Event Notifications not required for sample application
+  #checkov:skip=CKV2_AWS_61:Life cycle configuration not required for sample application
   for_each = toset(["upload-bucket", "lambda-bucket"])
   bucket   = "${each.key}-${data.aws_caller_identity.current.account_id}-${var.aws_region}"
 }
@@ -37,8 +39,16 @@ data "archive_file" "lambda_greetings_server" {
   output_path = "${path.module}/greetings-server.zip"
 }
 
-resource "aws_s3_bucket_object" "lambda_greetings_server" {
-  bucket = aws_s3_bucket.buckets["lambda-bucket"].id #argument deprecated
+# resource "aws_s3_bucket_object" "lambda_greetings_server" {
+#   bucket = aws_s3_bucket.buckets["lambda-bucket"].id #argument deprecated
+#   key    = "greetings-server.zip"
+#   source = data.archive_file.lambda_greetings_server.output_path
+#   etag   = filemd5(data.archive_file.lambda_greetings_server.output_path)
+#   #checkov:skip=CKV_AWS_186:Encryption is automatically done by ASEA
+# }
+
+resource "aws_s3_object" "lambda_greetings_server" {
+  bucket = aws_s3_bucket.buckets["lambda-bucket"].id
   key    = "greetings-server.zip"
   source = data.archive_file.lambda_greetings_server.output_path
   etag   = filemd5(data.archive_file.lambda_greetings_server.output_path)
@@ -153,7 +163,7 @@ resource "aws_lambda_function" "greetings_server_lambda" {
   #checkov:skip=CKV_AWS_173:The environment variables below are encrypted at rest with the default Lambda service key.
   #checkov:skip=CKV_AWS_272: "Ensure AWS Lambda function is configured to validate code-signing"
   s3_bucket = aws_s3_bucket.buckets["lambda-bucket"].id
-  s3_key    = aws_s3_bucket_object.lambda_greetings_server.key
+  s3_key    = aws_s3_object.lambda_greetings_server.key
 
   runtime                        = "nodejs14.x"
   handler                        = "./lambda.handler"
@@ -186,6 +196,7 @@ resource "aws_api_gateway_resource" "proxy" {
   rest_api_id = aws_api_gateway_rest_api.apiLambda.id
   parent_id   = aws_api_gateway_rest_api.apiLambda.root_resource_id
   path_part   = "{proxy+}"
+#checkov:skip=CKV2_AWS_53:Api request authorization not required for sample application
 }
 
 resource "aws_api_gateway_method" "proxyMethod" {
@@ -194,6 +205,7 @@ resource "aws_api_gateway_method" "proxyMethod" {
   http_method   = "ANY"
   authorization = "NONE"
   #checkov:skip=CKV_AWS_59:API_KEY authotization is not required for this sample application 
+  #checkov:skip=CKV2_AWS_53:API request validation is not required for this sample application
 }
 
 resource "aws_api_gateway_integration" "lambda" {
@@ -215,6 +227,7 @@ resource "aws_api_gateway_method" "proxy_root" {
   http_method   = "ANY"
   authorization = "NONE"
   #checkov:skip=CKV_AWS_59:API_KEY authotization is not required for this sample application
+  #checkov:skip=CKV2_AWS_53:API request validation is not required for this sample application
 }
 
 resource "aws_api_gateway_integration" "lambda_root" {
