@@ -40,6 +40,8 @@ Open your terminal, navigate to the directory containing your Terraform configur
 terraform init
 ```
 
+This ensures that the statefile is downloaded to your local machine and prepares terraform for the migration
+
 ## 3. Use Existing or Create New S3 Bucket and DynamoDB Table
 
 **Option 1: Use Existing Resources (Recommended):**  
