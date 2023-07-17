@@ -26,8 +26,10 @@ Obtain the Terraform Cloud team token for your project-set from Paramater Store 
 
 ```shell
 
-export TFC_TEAM_TOKEN-<tfc-team-token>
+terraform login
 ```
+
+Enter the terraform team token when prompted
 
 ## 2. Run terraform init
 
