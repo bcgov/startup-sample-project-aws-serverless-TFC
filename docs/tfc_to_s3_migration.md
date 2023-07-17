@@ -26,7 +26,7 @@ Obtain the Terraform Cloud team token for your project-set from Paramater Store 
 
 ```shell
 
-export TFC_TEAM_TKEN-<tfc-team-token>
+export TFC_TEAM_TOKEN-<tfc-team-token>
 ```
 
 ## 2. Use Existing or Create New S3 Bucket and DynamoDB Table
