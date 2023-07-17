@@ -10,9 +10,9 @@ Please note that you will need the following prerequisites before proceeding wit
 
 Now, let's begin with the migration process for each environment:
 
-## 1. Set AWS Environment Variables
+## 1. Set Environment Variables
 
-Obtain the AWS credentials, including the session token, from the AWS Login Application at [https://login.nimbus.cloud.gov.bc.ca](https://login.nimbus.cloud.gov.bc.ca/) . Obtain the following environment variables and set them in your terminal
+Obtain the AWS credentials, including the session token, from the AWS Login Application at [https://login.nimbus.cloud.gov.bc.ca](https://login.nimbus.cloud.gov.bc.ca/) and set them in your terminal
 
 ```shell
 
@@ -22,7 +22,12 @@ export AWS_SESSION_TOKEN=<session-token>
 export AWS_DEFAULT_REGION=<region-name>
 ```
 
-Replace `<access-key-id>`, `<secret-access-key>`, `<session-token>`, and `<region-name>` with the corresponding values obtained from the login application.
+Obtain the Terraform Cloud team token for your project-set from Paramater Store in one of the AWS accounts and set it in your terminal.
+
+```shell
+
+export TFC_TEAM_TKEN-<tfc-team-token>
+```
 
 ## 2. Use Existing or Create New S3 Bucket and DynamoDB Table
 
