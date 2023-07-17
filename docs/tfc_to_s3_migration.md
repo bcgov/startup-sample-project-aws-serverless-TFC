@@ -96,7 +96,7 @@ Save the changes to your Terraform configuration file and commit the changes to 
 
 ## 5. Run terraform init -migrate
 
-Open your terminal, navigate to the directory containing your Terraform configuration files for each environment, and run the following command:
+Open your terminal, navigate to the directory containing your Terraform configuration files, and run the following command:
 
 ```shell
 
