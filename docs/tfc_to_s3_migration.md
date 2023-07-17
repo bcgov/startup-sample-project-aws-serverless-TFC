@@ -36,7 +36,7 @@ export TFC_TEAM_TOKEN-<tfc-team-token>
 - For each environment, use the existing S3 bucket and DynamoDB table by providing the respective names:
 - S3 bucket name: `terraform-remote-state-<license-plate>-<environment>`
 - DynamoDB table name: `terraform-remote-state-lock-<license-plate>`
-- Proceed to Step 4 to update the backend configuration with these existing resource names.
+- Proceed to Step 3 to update the backend configuration with these existing resource names.
 
 **Option 2: Create New Resources:**  
 
