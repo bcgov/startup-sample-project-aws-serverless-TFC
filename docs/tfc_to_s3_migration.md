@@ -29,14 +29,23 @@ Obtain the Terraform Cloud team token for your project-set from Paramater Store 
 export TFC_TEAM_TOKEN-<tfc-team-token>
 ```
 
-## 2. Use Existing or Create New S3 Bucket and DynamoDB Table
+## 2. Run terraform init
+
+Open your terminal, navigate to the directory containing your Terraform configuration files, and run the following command:
+
+```shell
+
+terraform init
+```
+
+## 3. Use Existing or Create New S3 Bucket and DynamoDB Table
 
 **Option 1: Use Existing Resources (Recommended):**  
 
 - For each environment, use the existing S3 bucket and DynamoDB table by providing the respective names:
 - S3 bucket name: `terraform-remote-state-<license-plate>-<environment>`
 - DynamoDB table name: `terraform-remote-state-lock-<license-plate>`
-- Proceed to Step 3 to update the backend configuration with these existing resource names.
+- Proceed to Step 4 to update the backend configuration with these existing resource names.
 
 **Option 2: Create New Resources:**  
 
@@ -63,7 +72,7 @@ Replace `custom-statefile-bucket-name` with a custom name for the S3 bucket, and
 
 Replace `custom-state-lock-table-name` with a custom name for the DynamoDB table, and `<region-name>` with the desired AWS region.
 
-## 3. Update the Backend Configuration
+## 4. Update the Backend Configuration
 
 **Terraform Cloud Backend Configuration (Old):**
 
@@ -96,7 +105,7 @@ terraform {
 
 Replace `<custom-statefile-bucket-name>` with the name of the existing or newly created S3 bucket. `<path-to-state-file>` is the path and name of the state file within the bucket. `<region-name>` refers to the AWS region where the bucket is located. `<custom-state-lock-table-name>` is the name of the existing or newly created DynamoDB table.
 
-## 4. Run terraform init -migrate
+## 5. Run terraform init -migrate
 
 Open your terminal, navigate to the directory containing your Terraform configuration files, and run the following command:
 
@@ -107,7 +116,7 @@ terraform init -migrate
 
 Review the output to ensure that the migration completed successfully without any errors. Once the migration is complete, Terraform will create a new state file in the S3 bucket.
 
-## 5. Run terraform plan
+## 6. Run terraform plan
 
 Run the following command to perform a plan and verify that there are "no changes":
 
@@ -118,10 +127,10 @@ terraform plan
 
 The plan output should indicate that there are "no changes" to be made, confirming that the migration to the new backend was successful.
 
-## 6. Save and Commit
+## 7. Save and Commit
 
 Save the changes to your Terraform configuration file and commit the changes to your version control system (if applicable).
 
-Repeat steps 1 to 6 for each environment (dev, test, prod, and tools) in your setup.
+Repeat steps 1 to 7 for each environment (dev, test, prod, and tools) in your setup.
 
 That's it! You have successfully migrated the Terraform backend from Terraform Cloud to Amazon S3 for each environment. Going forward, Terraform will use the new S3 backend for state management. Remember to update your documentation and inform other team members about the backend migration for each environment.
