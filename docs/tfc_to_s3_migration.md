@@ -107,6 +107,7 @@ Replace `<custom-statefile-bucket-name>` with the name of the existing or newly 
 
 ## 5. Run terraform init -migrate-state
 
+
 Open your terminal, navigate to the directory containing your Terraform configuration files, and run the following command:
 
 ```shell

@@ -24,16 +24,16 @@ jobs:
 
     steps:
       - name: checkout the repo and building the Backend
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
         with:
           node-version: 16
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: ${{ secrets.TERRAFORM_DEPLOY_ROLE_ARN }}
+          role-to-assume: ${{ vars.TERRAFORM_DEPLOY_ROLE_ARN }}
           aws-region: ca-central-1
 
       - name: building the backend
@@ -45,9 +45,10 @@ jobs:
         run: |
           cd server
           cat <<EOF > backend.hcl
-          bucket = "${{ secrets.S3_BACKEND_NAME }}"
-          key = "${{ secrets.LICENCEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
-          dynamodb_table = "terraform-remote-state-lock-${{ secrets.LICENCEPLATE }}"
+          bucket = "${{ vars.S3_BACKEND_NAME }}"
+          region = "ca-central-1"
+          key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app-backend.tfstate"
+          dynamodb_table =  "${{ vars.DYNAMO_DB_TABLE_NAME }}"
           EOF
           terraform init -backend-config=backend.hcl -input=false
           terraform apply -auto-approve -input=false
@@ -60,9 +61,10 @@ jobs:
           npm install
           CI=false npm run build
           cat <<EOF > backend.hcl
-          bucket = "${{ secrets.S3_BACKEND_NAME }}"
-          key = "${{ secrets.LICENCEPLATE }}/${{ env.environment }}/serverless-app.tfstate"
-          dynamodb_table = "terraform-remote-state-lock-${{ secrets.LICENCEPLATE }}"
+          bucket = "${{ vars.S3_BACKEND_NAME }}"
+          region = "ca-central-1"
+          key = "${{ vars.LICENSEPLATE }}/${{ env.environment }}/serverless-app-frontend.tfstate"
+          dynamodb_table = "${{ vars.DYNAMO_DB_TABLE_NAME }}"
           EOF
           terraform init -backend-config=backend.hcl -input=false
           terraform apply -auto-approve -input=false
