@@ -6,6 +6,7 @@ Please note that you will need the following prerequisites before proceeding wit
 
 - Terraform CLI installed on your local machine.
 - AWS CLI configured with the necessary credentials obtained from the AWS Login Application at [https://login.nimbus.cloud.gov.bc.ca](https://login.nimbus.cloud.gov.bc.ca/) .
+- Obtain the Terraform Cloud team token for your project-set from Paramater Store in one of the AWS accounts.
 
 Now, let's begin with the migration process for each environment:
 
