@@ -105,13 +105,14 @@ terraform {
 
 Replace `<custom-statefile-bucket-name>` with the name of the existing or newly created S3 bucket. `<path-to-state-file>` is the path and name of the state file within the bucket. `<region-name>` refers to the AWS region where the bucket is located. `<custom-state-lock-table-name>` is the name of the existing or newly created DynamoDB table.
 
-## 5. Run terraform init -migrate
+## 5. Run terraform init -migrate-state
+
 
 Open your terminal, navigate to the directory containing your Terraform configuration files, and run the following command:
 
 ```shell
 
-terraform init -migrate
+terraform init -migrate-state
 ```
 
 Review the output to ensure that the migration completed successfully without any errors. Once the migration is complete, Terraform will create a new state file in the S3 bucket.
