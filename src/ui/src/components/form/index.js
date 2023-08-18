@@ -35,7 +35,7 @@ const Form = ({ initialValues = null, isDisabled}) => {
       const formData= new FormData(); formData.append('image',values.file);
       
 
-      const uploadResponse = await fetch(`${process.env.REACT_APP_API_GW_BASE_URL}/api/v1/images`, {
+      const uploadResponse = await fetch(`/api/v1/images`, {
         method: 'POST',
         //headers: {'Content-Type': 'multipart/form-data'},
         body: formData,
@@ -46,7 +46,7 @@ const Form = ({ initialValues = null, isDisabled}) => {
 
     } 
    
-    const response = await fetch(`${process.env.REACT_APP_API_GW_BASE_URL}/api/v1/greeting`, {
+    const response = await fetch(`/api/v1/greeting`, {
       method: 'POST',
       crossDomain:true,
       headers: { 'Accept': 'application/json', 'Content-type': 'application/json' },
