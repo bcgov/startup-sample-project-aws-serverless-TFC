@@ -1,14 +1,17 @@
 import React from "react";
 import "./App.css";
-import GreetingSelector from "./GreetingSelector";
+import GreetingProvider from "./GreetingProvider";
 import GreetingList from "./GreetingList";
+import GreetingSelector from "./GreetingSelector";
 
 function App() {
   return (
     <div className="App">
-      <h1>Select a greeting</h1>
-      <GreetingSelector />
-      <GreetingList />
+      <h1>Public Cloud Sample Application</h1>
+      <GreetingProvider>
+        <GreetingSelector />
+        <GreetingList />
+      </GreetingProvider>
     </div>
   );
 }

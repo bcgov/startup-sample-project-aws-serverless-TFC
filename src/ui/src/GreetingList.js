@@ -1,36 +1,25 @@
-// src/GreetingList.js
-
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-
-import { API_BASE_URL } from "./config";
+import React, { useContext } from "react";
+import GreetingContext from "./GreetingContext";
 
 const GreetingList = () => {
-  const [greetingItems, setGreetingItems] = useState([]);
+  const { greetingItems } = useContext(GreetingContext);
 
-  useEffect(() => {
-    // Fetch greetings from the API
-    axios
-      .get(`${API_BASE_URL}/api/v1/greeting/latest`)
-      .then((response) => {
-        // Sort the items by date in descending order (newest first)
-        const sortedItems = response.data.greetingItems.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-        setGreetingItems(sortedItems);
-      })
-      .catch((error) => {
-        console.error("Error fetching greetings:", error);
-      });
-  }, []);
+  if (!greetingItems || !Array.isArray(greetingItems)) {
+    return <div>No greetings available.</div>;
+  }
+
+  const sortedGreetings = [...greetingItems].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
 
   return (
     <div>
-      <h2>Latest Greetings</h2>
+      <h3>Previous greeting selections</h3>
       <ul>
-        {greetingItems.map((item) => (
+        {sortedGreetings.map((item) => (
           <li key={item.id}>
-            {item.greeting} (at {new Date(item.createdAt).toLocaleString()})
+            {item.greeting}{" "}
+            <span>({new Date(item.createdAt).toLocaleString()})</span>
           </li>
         ))}
       </ul>

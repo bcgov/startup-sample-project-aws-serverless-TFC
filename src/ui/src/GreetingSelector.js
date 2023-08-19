@@ -1,37 +1,52 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import GreetingContext from "./GreetingContext";
 import axios from "axios";
 import { API_BASE_URL } from "./config";
 
-function GreetingSelector() {
-  const [greeting, setGreeting] = useState("hello");
+const GreetingSelector = () => {
+  const { greetingItems, setGreetingItems } = useContext(GreetingContext);
+  const [selectedGreeting, setSelectedGreeting] = useState("Aloha");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleGreetingChange = (e) => {
-    setGreeting(e.target.value);
+  const handleGreetingChange = (event) => {
+    setSelectedGreeting(event.target.value);
   };
 
-  const handleSubmit = async () => {
-    try {
-      const response = await axios.post(`${API_BASE_URL}/api/v1/greeting`, {
-        greeting,
+  const handleSendGreeting = () => {
+    setIsLoading(true);
+    axios
+      .post(`${API_BASE_URL}/api/v1/greeting`, { greeting: selectedGreeting })
+      .then((response) => {
+        const newGreetingItem = response.data;
+        setGreetingItems([newGreetingItem, ...greetingItems]);
+        setSelectedGreeting("");
+      })
+      .catch((error) => {
+        console.error("Error sending greeting:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-      console.log("Response:", response.data);
-      // Handle success - perhaps show a success message to the user
-    } catch (error) {
-      console.error("Error posting greeting:", error);
-      // Handle error - show an error message to the user
-    }
   };
 
   return (
     <div>
-      <select value={greeting} onChange={handleGreetingChange}>
-        <option value="hello">hello</option>
-        <option value="howdy">howdy</option>
-        <option value="bonjour">bonjour</option>
+      <h3>Select your favorite greeting</h3>
+      <select value={selectedGreeting} onChange={handleGreetingChange}>
+        <option value="Aloha">Aloha</option>
+        <option value="Bonjour">Bonjour</option>
+        <option value="Greetings and salutations">
+          Greetings and salutations
+        </option>
+        <option value="Hello">Hello</option>
+        <option value="Howdy">Howdy</option>
+        <option value="Konichiwa">Konichiwa</option>
       </select>
-      <button onClick={handleSubmit}>Submit</button>
+      <button onClick={handleSendGreeting} disabled={isLoading}>
+        {isLoading ? "Sending..." : "Send Greeting"}
+      </button>
     </div>
   );
-}
+};
 
 export default GreetingSelector;

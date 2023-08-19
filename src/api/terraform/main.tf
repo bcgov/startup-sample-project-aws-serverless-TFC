@@ -4,8 +4,8 @@ provider "aws" {
 
 data "archive_file" "store_greeting_zip" {
   type        = "zip"
-  source_dir  = "${path.module}/src/lambda_functions/store_greeting"
-  output_path = "${path.module}/out/lambda_functions/store_greeting.zip"
+  source_dir  = "${path.module}/../src/lambda_functions/store_greeting"
+  output_path = "${path.module}/../out/lambda_functions/store_greeting.zip"
 }
 
 resource "aws_lambda_function" "store_greeting" {
@@ -25,8 +25,8 @@ resource "aws_lambda_function" "store_greeting" {
 
 data "archive_file" "get_greetings_zip" {
   type        = "zip"
-  source_dir  = "${path.module}/src/lambda_functions/get_greetings"
-  output_path = "${path.module}/out/lambda_functions/get_greetings.zip"
+  source_dir  = "${path.module}/../src/lambda_functions/get_greetings"
+  output_path = "${path.module}/../out/lambda_functions/get_greetings.zip"
 }
 
 resource "aws_lambda_function" "get_all_greetings" {
@@ -134,7 +134,7 @@ resource "aws_apigatewayv2_api" "greetings_api" {
 
 resource "aws_apigatewayv2_route" "post_greeting" {
   api_id    = aws_apigatewayv2_api.greetings_api.id
-  route_key = "POST /greetings"
+  route_key = "POST /api/v1/greeting"
   target    = "integrations/${aws_apigatewayv2_integration.post_greeting_lambda.id}"
 }
 
@@ -149,7 +149,7 @@ resource "aws_apigatewayv2_integration" "post_greeting_lambda" {
 
 resource "aws_apigatewayv2_route" "get_all_greetings" {
   api_id    = aws_apigatewayv2_api.greetings_api.id
-  route_key = "GET /greetings"
+  route_key = "GET /api/v1/greeting/latest"
   target    = "integrations/${aws_apigatewayv2_integration.get_all_greetings_lambda.id}"
 }
 

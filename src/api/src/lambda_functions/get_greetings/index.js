@@ -12,13 +12,16 @@ exports.handler = async (event) => {
     const result = await dynamodb.scan(params).promise();
 
     const greetings = result.Items.map((item) => ({
+      id: item.id,
       greeting: item.greeting,
-      timestamp: item.timestamp,
+      createdAt: item.createdAt,
+      updatedAt: item.updatedAt,
     }));
 
+    const response = { greetingItems: greetings };
     return {
       statusCode: 200,
-      body: JSON.stringify(greetings),
+      body: JSON.stringify(response),
     };
   } catch (error) {
     console.error("Error retrieving greetings:", error);
