@@ -1,13 +1,13 @@
 import React from "react";
+import "@bcgov/bc-sans/css/BCSans.css";
 import "./App.css";
-import GreetingProvider from "./GreetingProvider";
-import GreetingList from "./GreetingList";
-import GreetingSelector from "./GreetingSelector";
+import GreetingProvider from "./components/GreetingProvider";
+import GreetingList from "./components/GreetingList";
+import GreetingSelector from "./components/GreetingSelector";
 
 function App() {
   return (
     <div className="App">
-      <h1>Public Cloud Sample Application</h1>
       <GreetingProvider>
         <GreetingSelector />
         <GreetingList />
