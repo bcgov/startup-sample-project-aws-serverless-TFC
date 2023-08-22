@@ -6,10 +6,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 const GreetingSelector = () => {
-  const { greetingItems, setGreetingItems } = useContext(GreetingContext);
   const [selectedGreeting, setSelectedGreeting] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(1);
+  const { greetingItems, setGreetingItems, setPage } =
+    useContext(GreetingContext);
 
   const handleGreetingChange = (event) => {
     setSelectedGreeting(event.target.value);
@@ -17,7 +17,7 @@ const GreetingSelector = () => {
 
   const handleSendGreeting = () => {
     setIsLoading(true);
-    setPage(0);
+    setPage(1);
     axios
       .post(`${API_BASE_URL}/api/v1/greeting`, { greeting: selectedGreeting })
       .then((response) => {

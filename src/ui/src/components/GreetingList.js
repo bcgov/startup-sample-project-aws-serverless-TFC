@@ -1,13 +1,10 @@
 import React, { useContext, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import GreetingContext from "./GreetingContext";
 
 const PAGE_SIZE = 10;
 
 const GreetingList = () => {
-  const { greetingItems } = useContext(GreetingContext);
-  const [page, setPage] = useState(1);
+  const { greetingItems, page, setPage } = useContext(GreetingContext);
 
   if (!greetingItems || !Array.isArray(greetingItems)) {
     return <div>No greetings available.</div>;

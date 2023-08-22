@@ -6,6 +6,7 @@ import { API_BASE_URL } from "../config";
 const GreetingProvider = ({ children }) => {
   const [greetingItems, setGreetingItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     // Fetch greetings when component mounts
@@ -28,7 +29,9 @@ const GreetingProvider = ({ children }) => {
   }, []);
 
   return (
-    <GreetingContext.Provider value={{ greetingItems, setGreetingItems }}>
+    <GreetingContext.Provider
+      value={{ greetingItems, setGreetingItems, page, setPage }}
+    >
       {children}
     </GreetingContext.Provider>
   );
