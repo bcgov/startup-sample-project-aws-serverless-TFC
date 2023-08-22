@@ -27,10 +27,6 @@ const GreetingProvider = ({ children }) => {
       });
   }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <GreetingContext.Provider value={{ greetingItems, setGreetingItems }}>
       {children}
