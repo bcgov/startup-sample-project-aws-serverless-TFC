@@ -2,15 +2,14 @@
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "General",
+            "Sid": "IAM",
             "Effect": "Allow",
             "Action": [
-                "cloudwatch:DescribeAlarmsForMetric",
-                "sns:Unsubscribe",
-                "sns:GetSubscriptionAttributes",
-                "cloudwatch:ListMetrics"
+                "iam:*"
             ],
-            "Resource": "*"
+            "Resource": [
+                "*"
+            ]
         },
         {
             "Sid": "S3",
@@ -18,120 +17,18 @@
             "Action": [
                 "s3:*"
             ],
-            "Resource": [                
-                "arn:aws:s3:::tnfhhm-dev-serverless-sample-app/*",
-                "arn:aws:s3:::upload-bucket*",
-                "arn:aws:s3:::lambda-bucket*",
-                "arn:aws:s3:::sample-app*"
-            ]
-        },
-        {
-            "Sid": "IAM",
-            "Effect": "Allow",
-            "Action": [
-                "iam:CreateRole",
-                "iam:AttachRolePolicy",
-                "iam:DetachRolePolicy",
-                "iam:GetRole",
-                "iam:GetPolicy",
-                "iam:DeleteRole",
-                "iam:GetRolePolicy",
-                "iam:TagRole",
-                "iam:DeleteRolePolicy",
-                "iam:UpdateRole",
-                "iam:ListRolePolicies",
-                "iam:ListRolePolicies",
-                "iam:ListAttachedRolePolicies",
-                "iam:ListInstanceProfilesForRole",
-                "iam:PutRolePolicy",
-                "iam:PassRole"
-            ],
             "Resource": [
-                "arn:aws:iam::<aws-account-id>:policy/ecs_task_execution_cwlogs",
-                "arn:aws:iam::<aws-account-id>:policy/sample_app_container_cwlogs",
-                "arn:aws:iam::<aws-account-id>:policy/upload_bucket_policy",
-                "arn:aws:iam::<aws-account-id>:policy/sample_app_dynamodb",
-                "arn:aws:iam::<aws-account-id>:role/startupSampleEcsTaskExecutionRole",
-                "arn:aws:iam::<aws-account-id>:role/sample_app_container_role",
-                "arn:aws:iam::<aws-account-id>:role/serverless_lambda*"
-            ]
-        },
-        {
-            "Sid": "Budgets",
-            "Effect": "Allow",
-            "Action": [
-                "budgets:ViewBudget",
-                "budgets:DescribeBudgetAction",
-                "budgets:ModifyBudget"
-            ],
-            "Resource": [
-                "arn:aws:budgets::<aws-account-id>:budget/startup-sample-monthly/action/*",
-                "arn:aws:budgets::<aws-account-id>:budget/startup-sample-monthly"
-            ]
-        },
-        {
-            "Sid": "Cloudwatch",
-            "Effect": "Allow",
-            "Action": [
-                "cloudwatch:DeleteAlarms",
-                "cloudwatch:UntagResource",
-                "cloudwatch:DescribeAlarms",
-                "cloudwatch:DisableAlarmActions",
-                "cloudwatch:PutMetricAlarm",
-                "cloudwatch:TagResource",
-                "cloudwatch:EnableAlarmActions",
-                "cloudwatch:ListTagsForResource"
-            ],
-            "Resource": [
-                "arn:aws:cloudwatch:ca-central-1:<aws-account-id>:alarm:sample_cpu_utilization_*",
-                "arn:aws:cloudwatch:ca-central-1:<aws-account-id>:insight-rule/*"
-            ]
-        },
-        {
-            "Sid": "Dynamodb",
-            "Effect": "Allow",
-            "Action": [
-                "dynamodb:*"
-            ],
-            "Resource": [
-                "arn:aws:dynamodb:ca-central-1:<aws-account-id>:*"
+                "*"
             ]
         },
         {
             "Sid": "Cloudfront",
             "Effect": "Allow",
             "Action": [
-                "cloudfront:CreateCachePolicy",
-                "cloudfront:GetDistribution",
-                "cloudfront:GetDistributionConfig",
-                "cloudfront:TagResource",
-                "cloudfront:UpdateDistribution",
-                "cloudfront:ListTagsForResource",
-                "cloudfront:UntagResource",
-                "cloudfront:CreateDistribution",
-                "cloudfront:DeleteCachePolicy",
-                "cloudfront:DeleteDistribution",
-                "cloudfront:CreateCloudFrontOriginAccessIdentity",
-                "cloudfront:GetCloudFrontOriginAccessIdentity",
-                "cloudfront:DeleteCloudFrontOriginAccessIdentity"
+                "cloudfront:*"
             ],
             "Resource": [
-                "arn:aws:cloudfront::<aws-account-id>:*"
-            ]
-        },
-        {
-            "Sid": "SNS",
-            "Effect": "Allow",
-            "Action": [
-                "sns:Subscribe",
-                "sns:GetTopicAttributes",
-                "sns:CreateTopic",
-                "sns:DeleteTopic",
-                "sns:ListTagsForResource",
-                "SNS:SetTopicAttributes"
-            ],
-            "Resource": [
-                "arn:aws:sns:ca-central-1:<aws-account-id>:startup-sample-billing-alert-topic"
+                "*"
             ]
         },
         {
@@ -140,7 +37,17 @@
             "Action": [
                 "lambda:*"
             ],
-            "Resource": "arn:aws:lambda:ca-central-1:<aws-account-id>:function:greetings_server_fn"
+            "Resource": "*"
+        },
+        {
+            "Sid": "Dynamodb",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:*"
+            ],
+            "Resource": [
+                "*"
+            ]
         },
         {
             "Sid": "APIgateway",
@@ -149,7 +56,7 @@
                 "apigateway:*"
             ],
             "Resource": [
-                "arn:aws:apigateway:ca-central-1::*"
+                "*"
             ]
         }
     ]
