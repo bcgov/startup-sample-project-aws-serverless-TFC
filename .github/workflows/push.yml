@@ -15,11 +15,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    environment:
+      name: dev
+      url: ${{ steps.tf-outputs.outputs.apigw_url }}
 
     steps:
       - name: checkout the repo and building the Backend
