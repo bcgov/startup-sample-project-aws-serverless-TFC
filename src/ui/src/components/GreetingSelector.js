@@ -58,7 +58,7 @@ const GreetingSelector = () => {
         <div class="container">
           <button
             class={
-              selectedGreeting == ""
+              selectedGreeting === ""
                 ? "BC-Gov-PrimaryButton-disabled"
                 : "BC-Gov-PrimaryButton"
             }

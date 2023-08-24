@@ -5,7 +5,6 @@ import { API_BASE_URL } from "../config";
 
 const GreetingProvider = ({ children }) => {
   const [greetingItems, setGreetingItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -22,9 +21,6 @@ const GreetingProvider = ({ children }) => {
       })
       .catch((error) => {
         console.error("Error fetching greetings:", error);
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
   }, []);
 
