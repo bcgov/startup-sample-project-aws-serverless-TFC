@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: dev
-      url: ${{ steps.tf-outputs.outputs.apigw_url }}
+      url: ${{ steps.tf-outputs.outputs.API_GW_URL }}
 
     steps:
       - name: checkout the repo and building the Backend
@@ -49,11 +49,10 @@ jobs:
         id: tf-outputs
         run: |
           sudo apt-get update && sudo apt-get install -y jq
-          OUTPUTS=$(terraform output -json)
-          echo "::set-output name=apigw_url::$(echo $OUTPUTS | jq -r '.apigw_url.value')"
-          echo "::set-output name=cf_distribution_id::$(echo $OUTPUTS | jq -r '.cloudfront.value.distribution_id')"
-          echo "::set-output name=s3_bucket_arn::$(echo $OUTPUTS | jq -r '.s3_bucket_arn.value')"
-          # You may need to install jq in your GitHub Actions runner if it's not available
+          terraform output -json > outputs.json
+          echo "API_GW_URL=$(jq -r .apigw_url.value outputs.json)" >> $GITHUB_ENV
+          echo "CF_DISTRIBUTION_ID=$(jq -r .cloudfront.value.distribution_id outputs.json)" >> $GITHUB_ENV
+          echo "S3_BUCKET_ARN=$(jq -r .s3_bucket_arn.value outputs.json)" >> $GITHUB_ENV
         working-directory: src/terraform
 
       - name: Build the front-end
@@ -61,9 +60,7 @@ jobs:
           cd src/ui
           npm install
           npm run build
-          aws cloudfront create-invalidation --distribution-id ${{ steps.tf-outputs.outputs.cf_distribution_id }} --paths "/*"
-          # The bucket name is extracted from the ARN. 
-          # Example: If ARN is arn:aws:s3:::mybucket, bucket name is mybucket.
-          aws s3 sync --delete ./build s3://$(echo "${{ steps.tf-outputs.outputs.s3_bucket_arn }}" | cut -d: -f6)
+          aws cloudfront create-invalidation --distribution-id $CF_DISTRIBUTION_ID --paths "/*"
+          aws s3 sync --delete ./build s3://$(echo "$S3_BUCKET_ARN" | cut -d: -f6)
         env:
-          REACT_APP_API_URL: ${{ steps.tf-outputs.outputs.apigw_url }}
+          REACT_APP_API_URL: ${{ steps.tf-outputs.outputs.API_GW_URL }}
