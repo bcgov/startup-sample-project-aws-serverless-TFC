@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: dev
-      url: ${{ steps.tf-outputs.outputs.apigw_url }}
 
     steps:
       - name: checkout the repo and building the Backend
